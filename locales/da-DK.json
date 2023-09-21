@@ -1,0 +1,418 @@
+{
+"ErrorPage": {
+
+  "SEOpagetitle": "fejlside",
+  "SEOdescription": "Der er desværre sket en fejl...",
+  "SEOogdescription": "Der er desværre sket en fejl...",
+
+  "errorTitle": "Uuups!",
+  "error": "Fejl ",
+  "btn": "Gå til forsiden"
+},
+
+"CookieBanner": {
+  "Title": "Privatlivsindstillinger",
+  "Description": "Dette værktøj hjælper dig med at vælge og deaktivere forskellige tags, trackere og analytiske værktøjer, der bruges på denne hjemmeside.",
+  "PolicyLink": "Persondata & cookiepolitik",
+  "EssentialTabTitle": "Essentielle",
+  "EssentialTabDescription": "Disse teknologier er påkrævet for at aktivere hjemmesidens kernefunktioner.",
+  "FunctionalTabTitle": "Funktionelle",
+  "FunctionalTabDescription": "Disse teknologier er nødvendige for at aktivere nogle ekstra funktioner på webstedet.",
+  "StatisitcalTabTitle": "Statistikker",
+  "StatisitcalTabDescription": "Disse teknologier gør det muligt for os at analysere brugen af hjemmesiden med henblik på at måle og forbedre dens ydeevne",
+  "MarketingTabTitle": "Markedsføring",
+  "MarketingTabDescription": "Disse teknologier bruges af annoncører til at vise annoncer, der er relevante for dig og dine interesser. For at kunne målrette annoncer på denne samt andre hjemmesider, deler vi oplysningerne med virksomheder vi samarbejder med.",
+  "CTA1": "Indstillinger",
+  "CTA2": "Accepter og luk"
+},
+
+"MobileMenu": {
+  "title": "Sider",
+  "item0": "Produkt",
+  "item1": "Til forældre",
+  "item2": "Pakker",
+  "item3": "Om os",
+  "item4": "Kontakt os"
+},
+
+"Nav": {
+
+  "bannerNormal": "KONCENTRERET OG UFORSTYRRET UNDERVISNING - GRATIS DEMO OG INTRODUKTIONSKURUS - FULD TEKNISK SUPPORT",
+  "bannerConstruction": "HJEMMESIDEN ER UNDER DRASTISK OMBYGGELSE, VI SKYNDER OS ALT VI KAN!",
+
+  "Item0": "Produkt",
+  "Item1": "Til forældre",
+  "Item2": "Pakker",
+  "Item3": "Om os",
+  "CTA1": "Kontakt os"
+},
+
+"Footer": {
+  "Adress": "Birk centerpark 40\n7400 Herning, Danmark",
+  "CVR": "Cvr. Nr.: 43269305",
+  "Section1Title": "Sider",
+  "Section1Link1": "Pakker",
+  "Section1Link2": "Til forældre",
+  "Section1Link3": "Kontakt os",
+  "Section1Link4": "Om os",
+  "Section1Link5": "Produkt",
+  "Section2Title": "Socials",
+  "Section2Link1": "LinkedIn",
+  "Section2Link2": "Facebook",
+  "Section2Link3": "Instagram",
+  "Section2Link4": "Youtube",
+  "Section3Title": "Spørgsmål?",
+  "Section3Description": "Vi sidder altid klar til at svare på dine spørgsmål og lytte til din feedback!",
+  "Copytight": "© 2023. Alle rettigheder forbeholdes",
+  "Press": "Presse materiale",
+  "DataPolicyLink": "Cookie og data politik",
+  "TradePolicyLink": "Handelsbetingelser",
+  "CookieSettings": "Cookie Indstillinger",
+  "EsterEggText1": "Udviklet med",
+  "EsterEggText2": "af Bubbles"
+
+},
+
+"TradeConditions": {
+
+  "SEOpagetitle": "Handelsbetingelser",
+  "SEOdescription": "Læs mere om vores Handelsbetingelser.",
+  "SEOogdescription": "Læs mere om vores Handelsbetingelser.",
+
+  "Title": "Handelsbetingelser",
+  "Subtitle": "Produkter og tjenester udbydes af:",
+  "Company": "Bubbles ApS",
+  "CVR": "CVR-nr.: 43269305",
+  "Adress": "Birk centerpark 40, 7400 Herning",
+  "Mail": "{'hej'}{'@'}{'bubbles.dk'}",
+  "Phone": "+45 42 41 69 70",
+
+  "Section1": "Køb og betaling",
+  "Section1Text1": "Produkterne bliver leveret fysisk efter aftale med kunden.",
+  "Section1Text2": "Produkter kan købes med både bankoverførsel og EAN-faktura.",
+  "Section1Text3": "Alle priser er i danske kroner ekskl. moms.",
+  "Section1Text4": "For abonnementer gælder, at abonnementsprisen automatisk bliver trukket for hver abonnementsperiode. Kvittering for trækket tilsendes per email, hvis kunden skriftlig har bekræftet dette til følgende email: {'hej'}{'@'}{'bubbles.dk'}",
+
+  "Section2": "Opsigelse",
+  "Section2Text1": "Du kan når som helst opsige dit abonnement ved at kontakte os på: {'hej'}{'@'}{'bubbles.dk'}. Opsigelsen er dog ikke øjeblikkelig, efter ønske om opsigelse er man stadig forpligtet til at betale de resterende abonnementsbetalinger inden for den periode, man har bundet sig til ved indgåelse af aftalen. Dette kan ske via straksbetaling af det samlede resterende beløb, eller ved løbende abonnementsbetalinger indtil bindingsperiodens ophør.",
+  "Section2Text2": "Opsigelse fra licenstager skal ske ved skriftlig opsigelse til {'hej'}{'@'}{'bubbles.dk'} senest 8 dage efter fakturadato på faktura for seneste brugsrets-/serviceperiode. Ved licenstagers opsigelse udløber aftalen - og licenstagers brugsret - samtidig med udløb af den indeværende brugsrets-/serviceperiode.",
+  "Section2Text3": "Bubbles kan på ethvert tidspunkt opsige denne aftale med 3 (tre) måneders varsel. Ved Bubbles' opsigelse af aftalen, tilbagebetales eventuelt af licenstager forudbetalt afgift for brugsrets-/serviceabonnement for perioden efter aftalens ophør.",
+
+  "Section3": "Levering",
+  "Section3Text1": "Levering sker efter aftale med kunden og Bubbles.",
+
+  "Section4": "Ansvarsfraskrivelse",
+  "Section4Text1": "Vi er ansvarlige for at leverede produkter fungerer fuldkommen som afprøvet, lovet og efter hensigten.",
+  "Section4Text2": "Vi påtager os intet ansvar for eventuelle direkte, indirekte, tilfældige eller følgeskader og tab som følge af brug af vores tjenester. Vi garanterer ikke, at tjenesterne vil være fejlfri, uafbrudt eller tilgængelige til enhver tid. Vi påtager os heller ikke ansvar for produkt mangler/problemer som resultat af miljøet produktet bruges i.",
+
+  "Section5": "Fortrydelsesret",
+  "Section5Text1": "Kunden har mulighed for at se og prøve systemet efter aftale med Bubbles. Derfor har kunden mulighed for at prøve og godkende produktet før køb, og derfor er der ingen fortrydelsesret.",
+  
+  "Section6": "Abonnement/licens",
+  "Section6Text1": "Alle rettigheder til software og hardware tilhører Bubbles ApS. Ved køb opnås udelukkende licens til at benytte det købte produkt som angivet under det pågældende produkt."
+},
+
+"DataPolicy": {
+
+  "SEOpagetitle": "Cookie og data politik",
+  "SEOdescription": "Læs mere om hvordan vi håndterer og beskytter din data.",
+  "SEOogdescription": "Læs mere om hvordan vi håndterer og beskytter din data.",
+
+  "Title": "Cookie og data politik",
+  "ValidityDate": "Gyldighedsdato: 29-06-2023",
+  "Description": "Denne Cookie og Databehandling Politik (herefter 'Politikken') beskriver, hvordan Bubbles ApS ('vi,' 'os,' eller 'vores') indsamler, bruger og beskytter personlige oplysninger om besøgende ('brugere,' 'du,' eller 'din') på vores hjemmeside www.bubbles.dk (herefter 'Hjemmesiden'). Ved at få adgang til eller bruge Hjemmesiden accepterer du vilkårene i denne Politik.",
+
+  "Section1": "1. Indsamling og brug af oplysninger",
+  "Section1Text1": "1.1. Cookies: Vi anvender cookies og lignende teknologier til at forbedre din brugeroplevelse og indsamle oplysninger om dine interaktioner på hjemmesiden. Cookies er små tekstfiler, der gemmes på din enhed og bruges til at genkende dig, huske dine præferencer og tilbyde personlig tilpasset indhold og tjenester. Du kan til enhver tid administrere dine cookie-indstillinger ved at ændre indstillingerne i din browser.",
+  "Section1Text2": "1.2. Logfiler: Vi indsamler visse oplysninger automatisk og gemmer dem i logfiler. Disse oplysninger kan omfatte din IP-adresse, browser-type, operativsystem, henvisnings- og afslutningssider samt dato og tidspunkt for besøget. Vi bruger disse oplysninger til at analysere tendenser, administrere hjemmesiden og indsamle demografiske oplysninger. Vi behandler ikke disse oplysninger med det formål at identificere enkeltpersoner, medmindre det er nødvendigt i henhold til gældende lov.",
+  "Section1Text3": "1.3. Personlige oplysninger: Vi indsamler kun personlige oplysninger, som du frivilligt giver os, f.eks. når du udfylder kontaktformularer eller beder om tilsendelse af vores materiale. Disse oplysninger kan omfatte dit navn, e-mailadresse, telefonnummer og andre relevante oplysninger. Vi bruger disse oplysninger til at kommunikere med dig, besvare dine henvendelser og levere de tjenester, du anmoder om. Vi deler ikke dine personlige oplysninger med tredjeparter, medmindre det er nødvendigt for at opfylde dine anmodninger eller krævet i henhold til loven.",
+
+  "Section2": "2. Retsgrundlag for behandling af personoplysninger",
+  "Section2Text1": "Vi behandler dine personoplysninger i overensstemmelse med gældende lovgivning, herunder EU's databeskyttelsesforordning (GDPR). Vores behandling af personoplysninger sker på følgende retsgrundlag:",
+  "Section2Bullet1": "Opfyldelse af en kontrakt: Når behandlingen er nødvendig for at opfylde en kontrakt, eller for at træffe foranstaltninger på din anmodning inden indgåelse af en kontrakt.",
+  "Section2Bullet2": "Samtykke: Når du har givet os dit udtrykkelige samtykke til at behandle dine personoplysninger til bestemte formål.",
+  "Section2Bullet3": "Lovmæssige forpligtelser: Når behandlingen er nødvendig for at overholde gældende lovgivning eller juridiske forpligtelser.",
+
+  "Section3": "3. Deling af oplysninger med tredjeparter",
+  "Section3Text1": "Vi deler kun dine personlige oplysninger med tredjeparter, når det er nødvendigt for at levere de tjenester, du anmoder om, eller i overensstemmelse med gældende lovgivning. Vi kan også dele oplysninger med vores betroede tjenesteudbydere, der hjælper os med at drive og vedligeholde hjemmesiden, f.eks. hosting udbydere, analyse partnere og markedsføringsplatforme. Vi sikrer, at sådanne tredjeparter kun behandler dine personoplysninger i overensstemmelse med vores instruktioner og i overensstemmelse med gældende databeskyttelseslovgivning.",
+
+  "Section4": "4. Dine rettigheder",
+  "Section4Text1": "Du har visse rettigheder vedrørende behandlingen af dine personlige oplysninger, herunder retten til at anmode om adgang til, opdatering, sletning eller begrænsning af dine personoplysninger. Du har også ret til at trække dit samtykke tilbage og til at gøre indsigelse mod visse typer databehandling. For at udøve dine rettigheder eller for at indgive en klage, bedes du kontakte os ved hjælp af kontaktoplysningerne nedenfor.",
+
+  "Section5": "5. Datasikkerhed",
+  "Section5Text1": "Vi træffer passende tekniske og organisatoriske foranstaltninger for at beskytte dine personlige oplysninger mod uautoriseret adgang, ændring, videregivelse eller destruktion. Vi opbevarer kun dine personoplysninger i den periode, der er nødvendig for at opfylde de formål, som de blev indsamlet til, medmindre en længere opbevaringsperiode er påkrævet eller tilladt i henhold til gældende lovgivning.",
+
+  "Section6": "6. Ændringer i denne politik",
+  "Section6Text1": "Vi forbeholder os retten til at ændre eller opdatere denne Politik efter behov for at afspejle ændringer i vores praksis eller i henhold til gældende lovgivning. Vi opfordrer dig til regelmæssigt at gennemgå denne Politik for at blive opdateret om vores behandling af dine personoplysninger.",
+
+  "Section7": "7. Kontakt os",
+  "Section7Text1": "Hvis du har spørgsmål, bekymringer eller anmodninger vedrørende denne politik eller vores behandling af dine personlige oplysninger, bedes du kontakte os via følgende kontaktoplysninger:",
+  "Section7Mail": "{'hej'}{'@'}{'bubbles.dk'}",
+  "Section7Text2": "Vi vil bestræbe os på at besvare dine henvendelser hurtigst muligt."
+},
+
+"Home": {
+
+  "SEOpagetitle": "Forside",
+  "SEOdescription": "Bubbles udvikler hjælpemidler til børn som har det svært med støj, specielt i undervisnings situationer.",
+  "SEOogdescription": "Bubbles udvikler hjælpemidler til børn som har det svært med støj, specielt i undervisnings situationer.",
+
+  "Title": "Fokus på læring,\nikke på støjen.",
+  "Description": "Vi dæmper klassens støj, og skaber en\nlydtæt læringsboble i klasselokalet.",
+  "CTA1": "Kontakt os",
+  "CTA2": "Se video",
+
+  "LHTitle": "Bubbles i Løvens hule.",
+  "LHText": "I 2023 deltog vi i løvens hule season 8, hvor vi stolt kunne udvide ejerstablen med ingen mindre end Louise Herping Ellegaard, den brilliante kvinde bag læringsplatformen Clio. Yderligere har vi allieret os med hele Danmarks tidligere uddannelses- og forskningsminister, Tommy Ahlers!",
+
+  "CompanyTestimonalTitle": "Stolt omtalt i",
+  "CompanyTestimonalText": "Klik på et logo for at læse mere",
+
+  "CustomerTestimonalTitle": "Glade brugere,\nhele vejen rundt",
+  "CustomerTestimonalText": "Læs udtalelserne om Bubbles systemet fra synspunkter fra alle vinkler",
+
+  "card1text": "Vi har på vores skole et samarbejde med Bubbles. Vi har fra første møde følt os godt og professionelt behandlet. Ved opstartsmødet blev vores lærere grundigt introduceret til systemet, hvorefter lærere og Bubbles-medarbejdere testede systemet i praksis på klassen. Siden mødet har Bubbles fungeret upåklageligt. Vi er derfor meget glade for samarbejdet, da det har en positiv effekt for den enkelte elev og læringsrummet generelt.",
+  "card1role": "Viceskoleleder",
+  "card1kommune": "Herning kommune",
+
+  "card2text": "Bubbles har givet vores elever FOKUS på relevant info fra læreren, RO til indlæring, og ikke mindst en øget SELVTILFREDSHED, da de pludselig oplever at kunne MESTRE en klasseundervisning. Bubbles er et inkluderende værktøj. Vores samarbejde med Nicklas og Christian fra Bubbles kan kort sagt beskrives som enestående. To inspirerende og arbejdsomme gutter, med et fantastisk produkt. De er altid parate ved telefonen med support og forslag. De største anbefalinger herfra",
+  "card2role": "Inklusionskoordinator",
+  "card2kommune": "Hvidovre kommune",
+
+  "card3text": "Bubbles giver min datter fred, ro til at kunne fokusere, og overskud til at kunne indgå langt mere i familien efter skole. Som mor til et barn der bruger Bubbles og som tidligere formand for Landsforeningen Autisme Kreds Nordjylland, må jeg bare sige at jeg er imponeret og så glad indeni for dette system. Jeg ønsker at alle der f.eks. har sansemæssige udfordringer og koncentrationsbesvær får lov at få Bubbles, det gør virkelig en forskel.",
+  "card3role": "Forælder",
+  "card3kommune": "Aalborg Kommune",
+
+  "card4text": "Med Bubbles bliver det en 1 til 1 undervisning men i plenum. Ved at have det her system på, så oplever vi, at eleven bliver fuldstændig afskåret fra forstyrrelser og simpelthen bare kan fokuserer på den opgave eller den gennemgang foregåri klassen. Vi oplever også, at alle de spørgsmål han plejer at have er forsvundet, fordi han netop forstår, hvad opgaven går ud på.",
+  "card4role": "Lærer",
+  "card4kommune": "Anonym kommune",
+
+  "card5text": "Jeg oplevede en stor effekt med Bubbles. Eleven blev mere rolig og stille i timerne, og han havde mere fokus på de spørgsmål der blev stillet. Helt generelt er han mere “på” og mere koncentreret i den undervisning, vi har. Via Bubblessystemet kan man helt klart se, at eleven bliver mere opmærksom på det, som er kernen i undervisningen. Det vil sige selve opgaven, så han ikke bruger alt sin energi og kræfter på alt det som sker udenfor undervisningen.",
+  "card5role": "Lærer",
+  "card5kommune": "Anonym kommune",
+
+  "card6text": "For mine elever er fordelen ved Bubbles er, at man ikke ekskluderer eleverne på samme måde, som hvis man satte dem ind i sin egen “boks”. De har større mulighed for at føle sig en del af klassen ved at sidde i sin egen lydtætte  “bobbel” og koncentrerer sig om det faglige frem for, hvad alle kammeraterne laver i undervisningen.",
+  "card6role": "Lærer",
+  "card6kommune": "Anonym kommune",
+
+  "USPTitle": "Hvorfor Bubbles?",
+  "USPText": "Med Bubbles systemet oplever man...",
+  "USP1Title": "Fokus",
+  "USP1Text": "Ved at sortere alle overflødige sanseindtryk fra sikrer Bubbles, at eleven har de bedste muligheder for at koncentrere sig og holde fokus på læreren i undervisningen.",
+  "USP2Title": "Trivsel",
+  "USP2Text": "Ved at blive skærmet fra udefrakommende sanseindtryk, vil en elev, der bruger Bubbles, i mindre grad blive overstimuleret, uden gå på kompromis med deltagelse i fællesskabet. Barnet vil derfor ofte opleve mere overskud i frikvarterer og til at deltage i sociale- og familiære aktiviteter i efter skoletid.",
+  "USP3Title": "Balance",
+  "USP3Text": "Bubbles hjælper børn til at komme i bedre balance både i skolen, men også derhjemme, eftersom en lang skoledag nu er mere overskuelig at komme igennem.",
+  "USP4Title": "Ressourcer",
+  "USP4Text": "Bubbles hjælper eleven til at blive mere faglig kvalificeret, da fokus på og forståelse af opgaver og beskeder forbedres. Med Bubbles-systemet er det som at give en 1 til 1 undervisning, men i plenum, hvilket betyder, at denne hjælp til den enkelte elev kan frigive flere ressourcer i form af fx støttelærertimer.",
+  "USP5Title": "Ro",
+  "USP5Text": "Elever, der bruger Bubbles, oplever en mere rolig skoledag og vil derfor være mere tilbøjelige til ikke at forstyrre andre elever, da de i mindre grad bliver overstimuleret og udadreagerende. På den måde bidrager Bubbles også som et adfærdsregulerende hjælpemiddel ved at komme overstimuleringen i forkøbet.",
+  "USP6Title": "Engagement",
+  "USP6Text": "Bubbles-systemet understøtter et problemløsende samspil mellem lærer og elev. Grundet elevens lydtætte læringsboble med direkte forbindelse til læreren, forbedres elevens auditive skelneevne. På den måde kan læreren højne elevens engagement, ved at filtrere støjen fra og derved skabe et øget fokus på undervisningen.",
+
+  "FAQTitle": "Ofte stillede spørgsmål",
+  "FAQText": "Klik på et spørgsmål nedenfor for at se svaret, eller kontakt os for andre",
+  "FAQQ1": "Hvad siger vores brugere om systemet?",
+  "FAQQ1Text": "Bubblesystemet beskrives af brugere som værende et let- og fleksibelt hjælpemiddel, hvis funktion kan supplere med at skabe den ideelle klassedynamik for en optimal- og udbytterig undervisning.",
+  "FAQQ2": "Hvordan får vi et bubbles system på min skole?",
+  "FAQQ2Text": "Ønsker skolen at undersøge, om Bubblessystemet kan være det rette værktøj, tilbydes en gratis og uforpligtende demonstration af systemet. Dette kan både arrangeres i den fysiske undervisningen med lærer og elever, men også som en inspirationdialog med ledelsen. For nærmere information, se “kontakt os” (henvisning).",
+  "FAQQ3": "Hvordan fungerer Bubbles for underviseren?",
+  "FAQQ3Text": "En af de vigtigste funktioner for Bubblessystemet er, at det skal være let anvendeligt og ikke bryde lærerens vante undervisningsmetode. Derfor vil du som underviser opleve, at Bubblessystemet følger dig upåagtet igennem hele undervisningen. Det vil sige, at du med ro i maven kan undervise, som du har været vant til. Blot med den forskel, at du bærer en lille mikrofon på øret som sikrer, at dine tilknyttede Bubbles-elever kan høre dig klart og tydeligt.",
+  "FAQQ4": "Hvordan hjælper Bubbles eleven?",
+  "FAQQ4Text": "Bubbles hjælper dine elever med at få den nødvendige ro, så de kan fokusere på undervisningen. Ved at skærme eleven fra overflødige sanseindtryk, rettes fokus mod lærerens stemme, og skaber de bedst mulige rammer for læring. (sikrer eleven mulighed for faglig fremgang/en mere udbytterig skoledag/får mere ud af at komme i skole/en skoledag uden overstimuli)",
+  "FAQQ5": "Hvordan fungerer et Bubblessystem i praksis?",
+  "FAQQ5Text": "Bubblessystemet er et specialudviklet system i klassen til børn med diagnoser, heriblandt ADHD, ADD, Autisme, men også for de børn med generel koncentrationsbesvær. Eleven får et par støjreducerende hovedtelefoner mens læreren får en lille mikrofon på øret. Det vil sige, at du som lærer fortsat formidler undervisningen på den måde, som du er vant til, men med den fordel, at eleven nu udelukkende kan høre lærerens stemme i sine hovedtelefoner. Derved skærmes eleven fra klassens overflødige støj, der kan være det “triggende” element.",
+  "FAQQ6": "Hvordan fungerer det, hvis eleven gerne vil høre sine klassekammerater?",
+  "FAQQ6Text": "Hvis man som Bubblesbruger har behov for at høre klassedialogen, men fortsat gerne vil beholde sine hovedtelefoner på, har man mulighed for at trykke på en knap på hovedtelefonen, som slukker støjreduktionen. På den måde kan man høre sine klassekammeraters svar, deltage på lige fod med de andre i klassedialogen og fortsat høre sin lærers stemme forhøjet i hovedtelefonen. Efterfølgende trykker eleven på den samme knap, og er igen skærmet for støjen.",
+  "FAQCTATitle": "Fandt du ikke svar på dit spørgsmål?",
+  "FAQCTAText": "Du er mere end velkommen til at skrive til os!",
+  "FAQCTAbtn": "Kontakt os" 
+},
+
+"AboutUs": {
+
+  "SEOpagetitle": "Om os",
+  "SEOdescription": "Mød teamet bag Bubbles, og læs mere om den spændende rejser som ligger til grund for virksomheden.",
+  "SEOogdescription": "Mød teamet bag Bubbles, og læs mere om den spændende rejser som ligger til grund for virksomheden.",
+
+  "MeetTheTeamTitle": "Sig hej til teamet",
+  "MeetTheInvestorsTitle": "Mød også vores højtelskede investorer",
+  "MeetTheTeamSubTitle": "Mød 'boblerne'",
+
+  "ChristianName": "Christian Ørum",
+  "ChristianRole": "Produkt & Teknik",
+
+  "NicklasName": "Nicklas Stokholm",
+  "NicklasRole": "Direktør & salg",
+
+  "RomanName": "Roman Berg Kjær",
+  "RomanRole": "Skole konsulent",
+
+  "MikkelName": "Mikkel Dam",
+  "MikkelRole": "Marketing & SoMe",
+
+  "MichaelName": "Michael Svendsen",
+  "MichaelRole": "Skole konsulent",
+
+  "CharlotteName": "Charlotte Fog",
+  "CharlotteRole": "Implementerings konsulent",
+
+  "IdaName": "Ida Sophie Guldbrandt Hansen",
+  "IdaRole": "Fundraiser",
+
+  "LouiseName": "Louise Herping Ellegaard",
+
+  "TommyName": "Tommy Ahlers",
+
+  "VoresHistorieTitle": "Vores historie",
+  "VoresHistorieText1": "Dette afsnit tager udgangspunkt i Bubbles' fundament, og hvordan byggestenene for vores drøm om at hjælpe en masse børn ude på skolerne, har formet vejen til hvor vi står i dag. (Opdateres løbende…)",
+  "VoresHistorieTitle2": "Den spæde begyndelse",
+  "VoresHistorieText2": "I 2020 stiftede vi, Christian og Nicklas, Bubbles. Det var mens vi gik på Herningsholm Erhvervsskole & Gymnasier, på 2. år. Her mødte vi hinanden for første gang i innovationsundervisningen. Trods det, at vi gik på hver vores uddannelse (Christian HTX og Nicklas HHX), havde vi begge en enorm interesse for faget 'innovation' Af selv samme årsag havde vi valgt dette som valgfag, hvor vi hurtigt dannede en gruppe på baggrund af vores kærlighed og ambitioner for dette fag.",
+  "VoresHistorieTitle3": "'Find så på en god ide gutter'",
+  "VoresHistorieText3": "Som en del af pensum i innovationsfaget skulle vi oprette en virksomhed med et produkt og deltage i de såkaldte 'Company programme' Dette er kendt som ”Verdens største entreprenørskabs konkurrence for ungdomsuddannelser” afholdt af Junior Achievement Worldwide. Det var meget stort for to unge knægte, der kun havde drømmene og visioner at knytte sig til. Men hvad skulle vi så finde på? Det skulle jo være noget, der ville ændre den etablerede opfattelse af noget specifikt. Noget, der kunne revolutionere en helt central problematik; en samfundsmæssig byrde, der kunne lindres ved hjælp af vores idé. Det stod klart for os, at vi i højere grad ville ramme dybt men smalt, frem for bredt og lavt. Pludseligt stod det klart for os; ideen til Bubbles-systemet, stod os nærmere, end hvad vi først havde troet. Den knytter sig nemlig helt tæt på Christians liv. Christians lillesøster har ADHD og autisme, og blev, på dette tidspunkt, hjemmeundervist af Christians forældre og ham selv. Før Christians lillesøster blev hjemmeundervist gik hun i specialklasse, hvor hun hver dag kom sønderknust hjem fra skole, netop fordi hun hverken kunne koncentrere sig eller lære noget. Årsagen til dette var ikke, at der ikke var nok personale til at tage sig af eleverne. Men grundet den støj, der florerede i klassen, blev skolen på daglig basis en pinefuld oplevelse. Da vi dykkede længere ned i problematik, kom vi hurtigt frem til, at det ikke kun er Christians lillesøster, der oplever den overflødige støj som værende udfordrende i klassen. Derfor så vi et potentiale i at hjælpe børn som Christians lillesøster. På den måde vil de få de samme læringsmuligheder som andre børn i de danske skoler har. Det ville være fuldstændig enestående at kunne sætte dette i verden, og gøre sådan en mærkbar forskel.",
+  "VoresHistorieTitle4": "Et færdigt produkt og et LANGT konkurrence forløb senere..",
+  "VoresHistorieText4": "Vi udviklede på kort tid vores første prototype, og det første produkt blev hurtigt sat i verden efterfølgende. Bubbles deltog i diverse konkurrencer, og var også heldige at komme så langt, at vi nu kunne stille op til danmarksmesterskabet i entreprenørskab. Her modtog vi 1. pladsen samt æren af at repræsentere de danske farver til europamesterskabet. SÅ skulle der løbes stærkt, for at færdigudvikle systemet frem mod europamesterskabet, hvor en skarp jurie vurderede os. Endnu engang sejrede Bubblessystemet, og 1. pladsen blev atter dansk, samt + en specialpris fra AT&T indenfor IT-teknik. Virksomheden voksede, systemet var færdigt, og Bubbles skulle nu pludseligt også til verdensmesterskabet i entreprenørskab - det var mere, end hvad vi nogensinde havde turde drømme om, da vi valgte innovationsfaget som sidefag til vores respektive uddannelser.",
+  "VoresHistorieTitle5": "Den ultimative hæder",
+  "VoresHistorieText5": "Langt om længe kom den; Dagen, hvor verdensmesterskabsprisen 'Ralph De La Vega Award' blev overrakt af Tech legenden Ralph De La Vega, den tidligere CEO af AT&T Tilbage stod et hold fra hver af de seks kontinenter, sorteret af 1,2 millioner hold. Lykken ville ingen ende tage, og Bubbles hev guldet og verdensmesterskabet i entrepreneurskab med hjem til kontoret i Herning.",
+  "VoresHistorieText6": "Siden da har vi hentet forstærkninger til vores hold, og sammen kæmper vi hver eneste dag for at fremme læringsmulighederne for alle børn med diagnoser og koncentrationsbesvær i Danmark." 
+},
+
+"Packages": {
+
+  "SEOpagetitle": "Pakker",
+  "SEOdescription": "Læs mere om hvad vi tilbyder som service, og book en uforpligtende demonstration af produktet.",
+  "SEOogdescription": "Læs mere om hvad vi tilbyder som service, og book en uforpligtende demonstration af produktet.",
+
+  "Title1": "Vi skræddersyr pakker til netop jeres behov",
+  "Text1-1": "Bubbles hjælper bl. a.  børn med at komme igennem en hel skoledag og til at blive mere fagligt kvalificeret i skolen.  Bubbles systemer bliver skræddersyet til skolens behov. Vi kan dække alt fra en enkelt klasse til samtlige klasser på skolen, hvor der i hver klasse kan tilkobles alt fra 1 til 6 elever. Skolens aktuelle behov drøftes i fællesskab med Bubbles- teamet.",
+  "Text1-2": "Her ses et Bubbles system som eksempelvis klassesæt til 3 elever. Dette inkluderer 3 Støjreducerende hovedtelefoner, 1 lærer mikrofon, 1 systemenhed og vores specialiserede opladekasse.",
+  "Title2": "GRATIS og UFORPLIGTENDE demo'er I hele Danmark",
+  "Text2": "Her indgår vi i en dialog omkring produktet og dets effekt, det eventuelle behov på jeres skole og ikke mindst de praktiske detajler.",
+  "CTA1": "Kontakt os her"
+},
+
+"Product": {
+
+  "SEOpagetitle": "Produkt",
+  "SEOdescription": "Læs mere om hvad Bubbles systemet faktisk er, og hvad det kan gøre for børn med sanseforstyrende diagnoser mm.",
+  "SEOogdescription": "Læs mere om hvad Bubbles systemet faktisk er, og hvad det kan gøre for børn med sanseforstyrende diagnoser mm.",
+
+  "Title1": "Hvad er Bubbles?",
+  "Text1": "Bubbles-systemet er et hjælpemiddel til børn med ADHD, ADD, autisme og generel koncentrationsbesvær, som giver eleven evnen tilbage til at kunne fokuserer og koncentrer sig i klasseundervisningen. Systemet kan rumme op til 6 elever i samme klasse. Eleven får et par støjreducerende hovedtelefoner, mens læreren får en lille mikrofon på øret. Herimellem vil der oprettes en lydtæt læringsboble for eleven, hvilket sikrer et øget fokus på den undervisning der formidles.",
+  "Text2": "Yderligere er læreren udstyret med en systemenhed, hvor man med ét klik på en touchskærm er i stand til at vælge, hvilke elever der skal have den direkte kommunikation i sin personlige Bubble. Tilsvarende kan der vælges, hvem skal have den komplette arbejdsro. Systemet integreres transparent med undervisningen, da læreren skal undervise som normalt, men nu ved at barnet med hovedtelefonen kan fokusere på hvad læreren siger, og udelukkende hvad læreren siger.",
+  "Text3": "Eleven skærmes for overflødig støj i klassen, og i stedet øges koncentrationen over en hel skoledag.",
+  "Title2": "Hvordan skaffer man sig et system?",
+  "Text4": "Besøg vores pakkeside for at læse lidt mere om vores produkt pakker, samt høre om muligheden for at få en fremvisning af produktet.",
+  "CTA1": "Læs mere om pakker"
+},
+
+"ForParents": {
+
+  "SEOpagetitle": "Til forældre",
+  "SEOdescription": "Læs mere om hvad Bubbles konkret kan gøre for dit barn, og ikke mindst hvordan vi hjælper mange andre børn med forskellige diagnoser.",
+  "SEOogdescription": "Læs mere om hvad Bubbles konkret kan gøre for dit barn, og ikke mindst hvordan vi hjælper mange andre børn med forskellige diagnoser.",
+
+  "title1": "Hvilke børn kan bruge Bubbles?",
+  "text1": "Bubbles kan og hjælper lige nu børn såsom",
+
+  "case1Navn": "Magnus",
+  "case1Diagnose": "ADHD",
+  "case1Text": "Magnus har ADHD. Han har svært ved at sidde stille på stolen og fokusere på hvad læreren siger, hvis hans venner bagerst i klassen støjer lidt.",
+  "case2Navn": "Charlotte",
+  "case2Diagnose": "ADD",
+  "case2Text": "Charlotte har ADHD. Hun synes, at det er svært at lave sine opgaver og forstå lærerens beskeder, fordi hun let bliver distraheret af de andre børn i hendes klasse.",
+  "case3Navn": "Lukas",
+  "case3Diagnose": "Autisme",
+  "case3Text": "Lukas har autisme og har ofte svært ved at høre og forstå, hvad læreren siger og bliver tit overvældet, når de andre børn i klassen larmer.",
+  "case4Navn": "Lise",
+  "case4Diagnose": "APD",
+  "case4Text": "Lise har APD. Hvis de andre børn snakker, imens læreren taler, har hun svært ved at skelne mellem stemmerne. Det gør læreren meget svær at forstå.",
+  "case5Navn": "Peter",
+  "case5Diagnose": "Angst",
+  "case5Text": "Peter har angst. Hans anfald kan blive udløst, hvis der er for meget larm på samme tid eller omkring ham. ",
+
+  "title2_1": "Alle er ",
+  "title2_2": "forskellige",
+  "title2_3": ", men har oftest tilfælles...",
+
+  "text2": "Alle børn med diagnoser er komplet forskellige, selv børn med ens diagnoser for forskellige 'trigger' punkter og ting som de døjer med I hverdagen, ofte er det meget tydeligt hvad der før barnet til at blive utilpas og ked af det andregange er det mindre synligt. De fleste børn med de mest alment kendte diagnoser kæmper med deres sanser, hvor specielt høresansen ofte er den primære aktør.",
+  "text3": "Bubbles systemet er udviklet tæt med eksperter på området og ikke mindst ved at lytte til de børn og voksne som lider af høresanselige problematikker, vi kan hjælpe børn og unge der gør udtryk for auditorielle sanseforstyrrelser, om de så end er socialt utrykhed, nedsat koncentration, frustration og mange flere, hvis barnet har problemer med støj kan vi lindre den lange skoledag og give barnet bedre mulighed for at forstå og indgå i undervisngen, og ikke mindst have overskud til mor og far når de kommer hjem fra en mindre udmattende dag.",
+
+  "title3": "Hvad siger forældre om Bubbles?",
+  "parent1Text": "Min søn er en helt anderledes person efter skolen investerede i et Bubbles system. Hun plejer altid at være meget træt både ovre i skolen, men også herhjemme. Nu kommer han hjem og fortæller alt hvad hun har lavet, det plejer hun ellers aldrig at have overskud til.",
+  "parent1Details": "Katja, mor til Peter på 15 år",
+  "parent2Text": "Efter Mathias fik de der Bubbles hørebøffer har hans lærer sagt at han følger meget bedre med i timerne og faktisk tager fingeren i vejret. Han bliver hellere ikke længere ked af det lige inden han skal sove som vi før brugte ekstremt meget tid og kræfter på.",
+  "parent2Details": "Lasse, far til Mathias på 7 år",
+  "parent3Text": "Silke gør seriøs udtryk for at klassen nu er et meget bedre sted af være, og at hun ikke er nær så udtryk mere som hun var før. Jeg er bare så glad for at jeg ikke længere skal hente hende med tårer i øjnene hver dag. og at hun er begyndt at ses med de andre piger i fritiden.",
+  "parent3Details": "Mette, mor til Silke på 10 år",
+  "parent4Text": "Lige siden vi startede på Bubbles har jeg tydeligt kunne mærke at min søn er blevet mere glad for at komme i skole, det plejer at være et helvede at afleverer ham om morgen, men nu lader det faktisk til at han er meget glad for de ting han ellers plejer at hade som fx. matematik og dansk.",
+  "parent4Details": "Jette, mor til Rasmus på 9 år",
+  "parent5Text": "Holdop hvor er det bare fedt at Maria nu faktisk kan være i skole! hun havde før Bubbles daglige angstanfald der gjorde at hun bare skulle hjem og slappe af, men efter bubbles er angstanfalende dag til dag forsvundet! fordi hun nu får en helt anden form for ro og trykhed.",
+  "parent5Details": "Christina, mor til Maria på 13 år",
+  "parent6Text": "Jeg må bare sige at Bubbles virkeligt har hjulpet Oliver, jeg har aldrig set ham snakke så meget med hans storebror som han gør nu. Jeg er helt sikker på at han også får mere ud af undervisnigen omme i skolen, men jeg kan bare se hvor stor en forskel der er på ham nu herhjemme om aften.",
+  "parent6Details": "Kirsten, mor til Oliver på 10 år",
+  "DisclaimerText1": "Alle udtalelser ønsker at fremgå anonymt så hvis du personligt genkender personen udfra fornavnet og deres barns navn så fraråder vi at du opsøger direkte for deres skyld.",
+  "DisclaimerText2": "I sandhed, tak for din forståelse!",
+
+  "CTAtext": "Bubbles til dit barn?",
+  "CTAbtn": "Send os en henvendelse her"
+
+},
+
+"ContactUs": {
+
+  "errorTitle": "Fejl",
+  "errorMessage": "Du mangler vidst at udfylde et eller flere felter, tjek om du har udfyldt alle felter og prøv igen.",
+  "successTitle": "Success",
+  "successMessage": "Tusind tak fordi du sendte os en hendvendelse!",
+
+  "SEOpagetitle": "Kontakt os",
+  "SEOdescription": "Kontakt os hvis du kender - ellers selv har et barn som kunne have gavn af en lille hjælpende hånd.",
+  "SEOogdescription": "Kontakt os hvis du kender - ellers selv har et barn som kunne have gavn af en lille hjælpende hånd.",
+
+  "title": "Kontakt os",
+  "description": "Vi ser frem til at høre fra dig",
+  "CTA1": "Giv os et kald på:",
+  "CTA2": "Giv os et kald på:",
+
+  "formulaName": "Fulde navn",
+  "formulaPosition": "Din stilling",
+  "formulaPhone": "Telefon nr.",
+  "formulaEmail": "Email",
+  "lable1": "Øvrige oplysninger",
+  "formulaSkolensNavn": "Skolens navn",
+  "formulaSkolensNavnDescription": "Du SKAL vælge en skole fra listen, hvis du ikke kan finde din skole, skal du kontakte os direkte.",
+  "formulaBarnetsNavn": "Barnets navn",
+  "formulaBarnetsKlasse": "Barnets klasse",
+  "formulaBarnetsUdfordringer": "Barnets udfordringer",
+  "btn1": "Bliv kontaktet",
+  "btn2": "Send hendvendelse",
+
+  "role1": "Lærer",
+  "role2": "Forældre",
+  "role3": "Leder",
+  "role4": "Andet",
+
+  "formulaPolicyConfirm1": "Jeg accepterer",
+  "formulaPolicyConfirm2": "Bubbles' data politik",
+
+  "disclaimerText1": "Bubbles skal bruge nedenstående oplysninger så vi kan rette henvendelse til skolen angående dit barn, med følgende information kan Bubbles tage hele processen fra A til B, uden du som forældre skal bruge energi på det i en allerede travl hverdag.",
+  "disclaimerText2": "Vi passer på din data og bruger den kun i forbindelse med jeres barns case."
+
+},
+
+"ADHDarticle": {
+  "Title1": "Bubbles som set på ADHD Foreningen",
+  "Text1": "Efter Bubbles vandt verdensmesterskabet i entreprænørskab skrev ADHD-Foreningen d. 10 Juni 2021 en kort artikel om Bubbles systemet. ADHD foreningen har siden da i slutningen af 2022 fået lavet en ny hjemmeside, hvor deres artikler desværre ikke længere fremgår. Du kan læse artiklen her på siden nedenfor.",
+
+  "Title2": "Innovativ opfindelse til børn og unge med ADHD/ADD",
+  "Date": "Skrevet d. 10 Juni 2021",
+  "SubTitle1": "Danske gymnasielver vinder global entreprenørksbaskonkurrence.",
+  "Text2": "Deltagerne til det allerførste globale mesterskab i entreprenørskab, kaldet De La Vega global entreprenourship award, var de seks kontinentale vindere fra hele verden. Danske Bubbles, som Tre HHX og HTX-gymnasieelever fra herningsholm erhvervsskole og gymnasier står bag, vandt i 2020 både det danske og det europæiske mesterskab i entreprenørskab og repræsenterede derfor europa til De La Vega global entreprenourship award.",
+  "SubTitle2": "Hvor kommer ideen fra",
+  "Text3": "Ideen til Bubbles fik drengene, fordi Christians lillesøster har ADHD og altid har haft det hårdt i skolen, og Christian ville gerne hjælpe hende. Smmen med Nicklas Stohholm og Kevin Jensen udviklede han ideen Bubbles, som er en teknologisk løsninger, der fjerner støj fra omgivelserne, så børn og unge med ADHD og ADD lettere kan koncentrer sig i skolen. Ved hjælp af støjreducerende hovedtelefoner og en mikrofon på læreren skaber Bubbles' system et fordybelses område for elver, hvor de kun kan høre lærerens stemme og ikke forstyrrende snak eller støj i klassekolaket.",
+  "LinkText": "Læs hele nyheden på Fonden for Entreprænørskab ffe-ye.dk"
+}
+
+
+}
