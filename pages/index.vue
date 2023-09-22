@@ -95,25 +95,18 @@
                         <div v-for="(item, index) in useImageStore().allColorOptions" v-bind:key="index">
 
 
-                            <label :for="colorCheckbox + index" class="">
-                                <div class="h-10 w-10 rounded-lg" :style="{ backgroundColor: `rgba(${item.color.join(',')})` }">
-                                    <input type="checkbox" :id="colorCheckbox + index" class="">
+                            <label class="h-10 w-10">
+                                <div :for="colorCheckbox + index" class="group h-10 w-10 rounded-lg flex justify-center items-center relative" :style="{ backgroundColor: `rgba(${item.color.join(',')})` }">
+                                    <Icon v-if="item.checked" class="text-[#ffffff] text-[36px] drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]" name="material-symbols:fitbit-check-small-rounded" />
+                                    <input type="checkbox" :id="colorCheckbox + index" v-model="item.checked" @change="initConvert()" class="hidden">
+                                    
+                                    <div class="absolute bg-black w-max bottom-11 p-1 pl-2 pr-2 rounded-md group-hover:block hidden ">
+                                        <p class="text-white">{{ item.colorName }}</p>
+                                    </div>
+
                                 </div>
                             </label>
 
-
-                            <div class="border-2 border-gray-700/[0.3] w-fit p-[4px] rounded-full flex items-center relative font-medium bg-black/[0.10]">
-                                <label class="relative inline-flex items-center cursor-pointer mr-[4px]">
-                                    <input type="checkbox" value="" class="sr-only peer" v-model="item.checked" @change="initConvert()">
-                                    <div class="w-11 h-6 bg-gray-200 rounded-full dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-bubbles"></div>
-                                </label>
-
-                                <div class="w-4 h-4 p-[3px] mr-1" :style="{ backgroundColor: `rgba(${item.color.join(',')})` }">
-                                    <div class="w-full h-full rounded-full bg-white/[0.2]"></div>
-                                </div>
-
-                                <p class="text-[12px] relative top-[2px] mr-2">{{ item.colorName }}</p>
-                            </div>
 
                             
                         </div>
@@ -122,7 +115,14 @@
                 </div>
 
                 <div v-if="useMenuStore().menuItemShow == 'P'" class="p-2 rounded-xl">
-                    <p>16x16 plates: {{ useImageStore().width * useImageStore().height }}x</p>
+                    <p>{{ useImageStore().width * useImageStore().height + "x 16x16 baseplates" }}</p>
+
+                    <div v-for="(item, index) in useImageStore().allColorOptions" v-bind:key="index">
+                        <div v-if="item.count != 0">
+                            <p>{{ item.count + "x  " + item.colorName + " 1x1 plate" }}</p>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
@@ -139,8 +139,13 @@
             </div>
 
             <div class="w-fi h-full flex flex-col jusify-center font-medium">
-                <p class="pt-1 opacity-50">Price</p>
-                <p class="font-semibold">2.200dkk</p>    
+                <p class="pt-1 opacity-50">Price (0.07dkk pr tile)</p>
+                <p class="font-semibold">{{ "≈ " + 0.07 * (16 * useImageStore().width) * (16 * useImageStore().height) + "dkk" }}</p>    
+            </div>
+
+            <div class="w-fi h-full flex flex-col jusify-center font-medium">
+                <p class="pt-1 opacity-50">Total tiles</p>
+                <p class="font-semibold">{{ (16 * useImageStore().width) * (16 * useImageStore().height) + "x" }}</p>    
             </div>
 
         </div>
@@ -194,7 +199,7 @@ let rememberedColorToggle = true
         
             useImageStore().allColorOptions = []
             data.results.forEach(item => {
-                useImageStore().allColorOptions.push({color: hexToRgba(item.rgb), hexColor: item.rgb, colorName: item.name, checked: true, used: false})
+                useImageStore().allColorOptions.push({color: hexToRgba(item.rgb), hexColor: item.rgb, colorName: item.name, checked: true, used: false, count: 0})
             });
             //console.log(useImageStore().allColorOptions)
             
@@ -236,7 +241,7 @@ let rememberedColorToggle = true
             initConvert()
     }
 
-    function initConvert() {
+    async function initConvert() {
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -333,6 +338,7 @@ let rememberedColorToggle = true
                 if (legoColorEquivilant != 'rgba(0, 0, 0, 1)') {
                     let relatedColor = useImageStore().allColorOptions.indexOf(useImageStore().allColorOptions.find((arrayElem) => arrayElem.hexColor == rgbaToHex(legoColorEquivilant)))
                     useImageStore().allColorOptions[relatedColor].used = true
+                    useImageStore().allColorOptions[relatedColor].count += 1
                 }
                 
                 ctx.fillRect(studX, studY, studSize, studSize);  // Draw a rectangle
