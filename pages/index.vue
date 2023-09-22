@@ -95,6 +95,13 @@
                         <div v-for="(item, index) in useImageStore().allColorOptions" v-bind:key="index">
 
 
+                            <label :for="colorCheckbox + index" class="">
+                                <div class="h-10 w-10 rounded-lg" :style="{ backgroundColor: `rgba(${item.color.join(',')})` }">
+                                    <input type="checkbox" :id="colorCheckbox + index" class="">
+                                </div>
+                            </label>
+
+
                             <div class="border-2 border-gray-700/[0.3] w-fit p-[4px] rounded-full flex items-center relative font-medium bg-black/[0.10]">
                                 <label class="relative inline-flex items-center cursor-pointer mr-[4px]">
                                     <input type="checkbox" value="" class="sr-only peer" v-model="item.checked" @change="initConvert()">
@@ -184,9 +191,10 @@ let rememberedColorToggle = true
         .then(data => {
             // Handle the data here
             //console.log(data.results);
+        
             useImageStore().allColorOptions = []
             data.results.forEach(item => {
-                useImageStore().allColorOptions.push({color: hexToRgba(item.rgb), colorName: item.name, checked: true})
+                useImageStore().allColorOptions.push({color: hexToRgba(item.rgb), hexColor: item.rgb, colorName: item.name, checked: true, used: false})
             });
             //console.log(useImageStore().allColorOptions)
             
@@ -307,6 +315,8 @@ let rememberedColorToggle = true
         changeBrightness(useImageStore().brightness);
         changeContrast(useImageStore().contrast);
 
+        //console.log(useImageStore().allColorOptions)
+
         // Loop through each stud and map its color
         for (let x = 0; x < numStudsX; x++) {
             for (let y = 0; y < numStudsY; y++) {
@@ -319,6 +329,12 @@ let rememberedColorToggle = true
                 const legoColorEquivilant = findClosestColor(cellColor, getColorArray())
                 // Draw the stud with the closest LEGO color
                 ctx.fillStyle = legoColorEquivilant
+                
+                if (legoColorEquivilant != 'rgba(0, 0, 0, 1)') {
+                    let relatedColor = useImageStore().allColorOptions.indexOf(useImageStore().allColorOptions.find((arrayElem) => arrayElem.hexColor == rgbaToHex(legoColorEquivilant)))
+                    useImageStore().allColorOptions[relatedColor].used = true
+                }
+                
                 ctx.fillRect(studX, studY, studSize, studSize);  // Draw a rectangle
                 ctx.fillStyle = "rgba(255,255,255,0.1)";  // Change the fill color for the circle
                 ctx.beginPath();
@@ -326,6 +342,25 @@ let rememberedColorToggle = true
                 ctx.fill();
             }
         }
+
+        //disabled unused colors
+        useImageStore().allColorOptions.forEach(item => {
+            if (item.used == false) {
+                item.checked = false
+                item.used == false
+            }
+        });
+
+        // Sort the array based on the "checked" property
+        useImageStore().allColorOptions.sort((a, b) => {
+            if (a.checked && !b.checked) {
+                return -1; // a comes before b in the sorted order
+            } else if (!a.checked && b.checked) {
+                return 1; // b comes before a in the sorted order
+            } else {
+                return 0; // the order remains the same
+            }
+        });
 
         return canvas;
     }
@@ -391,9 +426,9 @@ let rememberedColorToggle = true
             }
         });
         
-        if (colorCounter == 0) [
+        if (colorCounter == 0) {
             colorArr = [hexToRgba('000000')]
-        ]
+        }
     
         return colorArr
     }
@@ -412,6 +447,35 @@ let rememberedColorToggle = true
 
         // Return the RGBA color in the "rgba(r, g, b, alpha)" format
         return JSON.parse(`[${r}, ${g}, ${b}, ${alpha}]`);
+    }
+
+    function rgbaToHex(rgba) {
+        // Extract the red, green, blue, and alpha values from the RGBA string
+        const rgbaValues = rgba.match(/\d+/g);
+
+        if (!rgbaValues || rgbaValues.length !== 4) {
+            // Invalid input, return an error value or handle the error as needed
+            return '000000'; // Default to black
+        }
+
+        // Convert the RGB values to hexadecimal
+        const red = parseInt(rgbaValues[0]);
+        const green = parseInt(rgbaValues[1]);
+        const blue = parseInt(rgbaValues[2]);
+        const alpha = Math.round(parseFloat(rgbaValues[3]) * 255); // Convert alpha to 0-255 range
+
+        const hexRed = red.toString(16).padStart(2, '0');
+        const hexGreen = green.toString(16).padStart(2, '0');
+        const hexBlue = blue.toString(16).padStart(2, '0');
+        const hexAlpha = alpha.toString(16).padStart(2, '0');
+
+        // Combine the hexadecimal values
+        const hexColor = `${hexRed}${hexGreen}${hexBlue}`;
+
+        // Optionally, you can include the alpha value in the hex color if needed
+        // const hexColorWithAlpha = `${hexRed}${hexGreen}${hexBlue}${hexAlpha}`;
+
+        return hexColor.toUpperCase();
     }
 
     function toggleAllColors() {
