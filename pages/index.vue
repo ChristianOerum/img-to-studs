@@ -4,8 +4,6 @@
 
 
         <div class="p-4 w-full h-[70vh] overflow-x-scroll flex flex-col no-scrollbar">
-            <button @click="getColorArray()">test</button>
-            <h2>LEGO Brick Image</h2>
             <canvas id="legoCanvas"></canvas>
         </div>
 
@@ -73,16 +71,27 @@
 
                 <div v-if="useMenuStore().menuItemShow == 'AI'" class="bg-white p-2 rounded-xl">
 
-                    <div class="flex gap-2">
-                        <div class="bg-gray-700/[0.3] rounded-xl flex p-1 pt-2 w-[50%]">
+                    <div class="gap-2 grid grid-cols-2">
+                        <div class="bg-gray-700/[0.3] rounded-xl flex p-1 pt-2 w-full">
                             <p class="font-semibold text-[14px] pl-2 pr-1">Brightness</p>
                             <input @change="initConvert()" id="brightness" step="10" type="number" v-model="useImageStore().brightness" class="w-[60px] bg-transparent font-semibold text-left">
                         </div>
 
-                        <div class="bg-gray-700/[0.3] rounded-xl flex p-1 pt-2 w-[50%]">
+                        <div class="bg-gray-700/[0.3] rounded-xl flex p-1 pt-2 w-full">
                             <p class="font-semibold text-[14px] pl-2 pr-1">Contrast</p>
                             <input @change="initConvert()" inputmode="numeric" step="0.1" id="contrast" type="number" v-model="useImageStore().contrast" class="w-[60px] bg-transparent text-left font-semibold">
                         </div>
+
+                        <div class="bg-gray-700/[0.3] rounded-xl flex p-1 pt-2 w-full">
+                            <p class="font-semibold text-[14px] pl-2 pr-1">ImageX position</p>
+                            <input @change="initConvert()" inputmode="numeric" id="contrast" type="number" v-model="useImageStore().x" class="w-[60px] bg-transparent text-left font-semibold">
+                        </div>
+
+                        <div class="bg-gray-700/[0.3] rounded-xl flex p-1 pt-2 w-full">
+                            <p class="font-semibold text-[14px] pl-2 pr-1">ImageY position</p>
+                            <input @change="initConvert()" inputmode="numeric" id="contrast" type="number" v-model="useImageStore().y" class="w-[60px] bg-transparent text-left font-semibold">
+                        </div>
+
                     </div>
                 </div>
 
@@ -140,12 +149,24 @@
 
             <div class="w-fi h-full flex flex-col jusify-center font-medium">
                 <p class="pt-1 opacity-50">Price (0.07dkk pr tile)</p>
-                <p class="font-semibold">{{ "≈ " + 0.07 * (16 * useImageStore().width) * (16 * useImageStore().height) + "dkk" }}</p>    
+                <p class="font-semibold">{{ "≈ " + (0.07 * (16 * useImageStore().width) * (16 * useImageStore().height)).toFixed(1) + "dkk" }}</p>    
             </div>
 
             <div class="w-fi h-full flex flex-col jusify-center font-medium">
                 <p class="pt-1 opacity-50">Total tiles</p>
                 <p class="font-semibold">{{ (16 * useImageStore().width) * (16 * useImageStore().height) + "x" }}</p>    
+            </div>
+
+            <div class="flex justify-center items-center">
+                <button @click="useImageStore().previewShowMosaic = !useImageStore().previewShowMosaic, initConvert()" class="p-1 pl-4 pr-4 rounded-full bg-black/[0.1] text-[14px] font-medium pt-2">Toggle preview</button>
+            </div>
+
+            <div class="flex justify-center items-center">
+                <button @click="" class="p-1 pl-4 pr-4 rounded-full bg-black/[0.1] text-[14px] font-medium pt-2">Show on wall</button>
+            </div>
+
+            <div class="flex justify-center items-center">
+                <button @click="" class="p-1 pl-4 pr-4 rounded-full bg-black/[0.1] text-[14px] font-medium pt-2">Download something</button>
             </div>
 
         </div>
@@ -175,39 +196,8 @@ let contrastInput
 let rememberedColorToggle = true
 
     onMounted(() => {
-        
-        const apiKey = '47033019a36c204b3f7c5606c05d4cc4';
-        const apiUrl = 'https://rebrickable.com/api/v3/lego/colors/';
 
-        // Construct the URL with the API key
-        const fullUrl = `${apiUrl}?key=${apiKey}`;
-
-        fetch(fullUrl)
-        .then(response => {
-            // Check if the response status is OK (200)
-            if (response.status !== 200) {
-            console.error(`Error: Status ${response.status}`);
-            return;
-            }
-
-            // Parse the JSON response
-            return response.json();
-        })
-        .then(data => {
-            // Handle the data here
-            //console.log(data.results);
-        
-            useImageStore().allColorOptions = []
-            data.results.forEach(item => {
-                useImageStore().allColorOptions.push({color: hexToRgba(item.rgb), hexColor: item.rgb, colorName: item.name, checked: true, used: false, count: 0})
-            });
-            //console.log(useImageStore().allColorOptions)
-            
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-
+        readCSV()
 
         fileInput = document.getElementById('fileInput');
         originalImage = document.getElementById('originalImage');
@@ -220,9 +210,6 @@ let rememberedColorToggle = true
         ctx = canvas.getContext('2d');
         brightnessInput = document.getElementById('brightness'); 
         contrastInput = document.getElementById('contrast'); 
-
-        
-
 
     })
 
@@ -238,6 +225,7 @@ let rememberedColorToggle = true
             img.src = e.target.result;
             }
             reader.readAsDataURL(file);
+            readCSV
             initConvert()
     }
 
@@ -315,15 +303,19 @@ let rememberedColorToggle = true
         canvas.height = numStudsY * studSize;
 
         // Draw the image on the canvas
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, useImageStore().x, useImageStore().y, canvas.width, canvas.height);
 
         changeBrightness(useImageStore().brightness);
         changeContrast(useImageStore().contrast);
 
-        //console.log(useImageStore().allColorOptions)
+        useImageStore().allColorOptions.forEach((item,i) => {
+            useImageStore().allColorOptions[i].count = 0
+        })
 
-        // Loop through each stud and map its color
-        for (let x = 0; x < numStudsX; x++) {
+        // Loop through each stud and map its color'
+
+        if (useImageStore().previewShowMosaic == true) {
+            for (let x = 0; x < numStudsX; x++) {
             for (let y = 0; y < numStudsY; y++) {
                 // Calculate the position and size of the stud
                 const studX = x * studSize;
@@ -348,25 +340,16 @@ let rememberedColorToggle = true
                 ctx.fill();
             }
         }
+        }
 
         //disabled unused colors
-        useImageStore().allColorOptions.forEach(item => {
+        useImageStore().allColorOptions.forEach((item,i) => {
             if (item.used == false) {
-                item.checked = false
-                item.used == false
+                useImageStore().allColorOptions[i].checked = false
+                useImageStore().allColorOptions[i].used = false
+                //useImageStore().allColorOptions[i].count = 0
             }
-        });
-
-        // Sort the array based on the "checked" property
-        useImageStore().allColorOptions.sort((a, b) => {
-            if (a.checked && !b.checked) {
-                return -1; // a comes before b in the sorted order
-            } else if (!a.checked && b.checked) {
-                return 1; // b comes before a in the sorted order
-            } else {
-                return 0; // the order remains the same
-            }
-        });
+        })
 
         return canvas;
     }
@@ -493,6 +476,46 @@ let rememberedColorToggle = true
         rememberedColorToggle = !rememberedColorToggle
 
         initConvert()
+    }
+
+    //Indlæser danske skoler datasæt
+    async function readCSV(){
+        try {
+            
+            //csv to array of obj's
+            const response = await fetch('/LEGO_Colors.csv');
+            const csvString  = await response.text()
+
+            const rows = csvString.split(/\r?\n/);
+            const headers = rows[0].split(';');
+            
+            // Remove the first row (headers) and filter out any empty rows
+            const dataRows = rows.slice(1).filter(row => row.trim() !== '');
+
+            // Parse data rows into an array of objects
+            const parsedData = dataRows.map(row => {
+            const values = row.split(';');
+            return headers.reduce((obj, header, index) => {
+                obj[header] = values[index];
+                return obj;
+            }, {});
+            });
+
+
+            useImageStore().allColorOptions = []
+
+            parsedData.forEach(item => {
+                useImageStore().allColorOptions.push({color: hexToRgba(item.rgb), hexColor: item.rgb, colorName: item.name, checked: true, used: false, count: 0})
+            });
+
+            //insert into store
+            //useContactFormulaStore().danskeSkoler = [...parsedData]
+
+        } catch (error) {
+    
+        console.error('Error fetching CSV data:', error);
+            
+    }
     }
 
 </script>

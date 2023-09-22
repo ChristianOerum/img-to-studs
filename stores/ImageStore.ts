@@ -2,13 +2,16 @@ import { defineStore } from 'pinia'
 
 export const useImageStore = defineStore('Image', {
   state: () => ({
-    keepAspect: false,
-    width: 6,
-    height: 4,
+    keepAspect: true,
+    width: 3,
+    height: 3,
     brightness: 0,
     contrast: 1,
+    x: 0,
+    y: 0,
 
-    allColorOptions: []
+    allColorOptions: [],
+    previewShowMosaic: true
 
   }),
 })
