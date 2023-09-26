@@ -1,10 +1,17 @@
 <template>
     
-    <div class="flex flex-col min-h-100vh">
+    <div class="flex flex-col min-h-100vh relative">
 
 
-        <div class="p-4 w-full h-[70vh] overflow-x-scroll flex flex-col no-scrollbar">
-            <canvas id="legoCanvas"></canvas>
+        <div class="p-8 w-full h-[70vh] overflow-x-scroll no-scrollbar flex flex-col items-center">
+            <canvas v-if="useImageStore().previewArtOnWall == false" class="max-w-full h-auto mb-2" id="legoCanvas"></canvas>
+
+            <div v-if="useImageStore().previewArtOnWall == true" class="w-full h-fit relative">
+                <img id="preview-image" alt="Preview Image" class="rounded-lg w-full" src="../assets/images/livingroom.jpg">
+                <div id="image-container" class="absolute top-[30%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-auto w-[20px] border-[3px] border-black overflow-hidden">
+                    <canvas id="legoCanvas" class="w-full h-auto"></canvas>
+                </div>
+            </div>
         </div>
 
 
@@ -64,9 +71,6 @@
                         <input @change="initConvert()" id="heightBox" type="text" v-model="useImageStore().height" class="w-[30px] bg-transparent text-center font-semibold">
                     </div>
 
-                    <h2 class="font-semibold text-[14px]">Keep Image A/R</h2>
-                    <input @change="initConvert()" id="checkboxAR" type="checkbox" v-model="useImageStore().keepAspect" class="w-[30px] bg-transparent text-center">
-
                 </div>
 
                 <div v-if="useMenuStore().menuItemShow == 'AI'" class="bg-white p-2 rounded-xl">
@@ -90,6 +94,11 @@
                         <div class="bg-gray-700/[0.3] rounded-xl flex p-1 pt-2 w-full">
                             <p class="font-semibold text-[14px] pl-2 pr-1">ImageY position</p>
                             <input @change="initConvert()" inputmode="numeric" id="contrast" type="number" v-model="useImageStore().y" class="w-[60px] bg-transparent text-left font-semibold">
+                        </div>
+
+                        <div class="bg-gray-700/[0.3] rounded-xl flex p-1 pt-2 w-full">
+                            <p class="font-semibold text-[14px] pl-2 pr-1">Conver to grayscale</p>
+                            <input @change="initConvert()" id="checkboxAR" type="checkbox" v-model="useImageStore().grayscale" class="h-[18px] w-[30px] bg-transparent text-center">
                         </div>
 
                     </div>
@@ -162,11 +171,11 @@
             </div>
 
             <div class="flex justify-center items-center">
-                <button @click="" class="p-1 pl-4 pr-4 rounded-full bg-black/[0.1] text-[14px] font-medium pt-2">Show on wall</button>
+                <button  @click="useImageStore().showGrid = !useImageStore().showGrid, initConvert()" class="p-1 pl-4 pr-4 rounded-full bg-black/[0.1] text-[14px] font-medium pt-2">toggle grid</button>
             </div>
 
             <div class="flex justify-center items-center">
-                <button @click="" class="p-1 pl-4 pr-4 rounded-full bg-black/[0.1] text-[14px] font-medium pt-2">Download something</button>
+                <button  @click="useImageStore().previewArtOnWall = !useImageStore().previewArtOnWall, initConvert()" class="p-1 pl-4 pr-4 rounded-full bg-black/[0.1] text-[14px] font-medium pt-2">show on wall</button>
             </div>
 
         </div>
@@ -194,6 +203,9 @@ let ctx
 let brightnessInput
 let contrastInput
 let rememberedColorToggle = true
+let preview_image
+let preview_mosaic
+let image_container
 
     onMounted(() => {
 
@@ -210,6 +222,7 @@ let rememberedColorToggle = true
         ctx = canvas.getContext('2d');
         brightnessInput = document.getElementById('brightness'); 
         contrastInput = document.getElementById('contrast'); 
+        preview_mosaic = document.getElementById('preview-mosaic')
 
     })
 
@@ -238,13 +251,7 @@ let rememberedColorToggle = true
                     originalImage.src = img.src;
                     let aspect_ratio = originalImage.clientHeight / originalImage.clientWidth
                     img.width = (16*8) * useImageStore().width
-
-                    if (useImageStore().keepAspect) {
-                        img.height = (16*8) * useImageStore().width * aspect_ratio
-                    }
-                    else {
-                        img.height = (16*8) * useImageStore().height
-                    }
+                    img.height = (16*8) * useImageStore().width * aspect_ratio
 
                     const legoImage = convertToLego(img, 8); // Customize brick size and colors
                     legoCanvas.width = (16*8) * useImageStore().width;
@@ -274,6 +281,7 @@ let rememberedColorToggle = true
         ctx.putImageData(imageData, 0, 0);
     };
 
+    
     function changeBrightness(brightness) {
 
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -290,13 +298,46 @@ let rememberedColorToggle = true
         ctx.putImageData(imageData, 0, 0);
     };
 
+    function applyGrayscaleFilter(ctx) {
+        const imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            const red = data[i];
+            const green = data[i + 1];
+            const blue = data[i + 2];
+
+            // Calculate the grayscale value using the luminance formula
+            const grayscale = 0.2989 * red + 0.5870 * green + 0.1140 * blue;
+
+            // Set the red, green, and blue channels to the grayscale value
+            data[i] = grayscale;
+            data[i + 1] = grayscale;
+            data[i + 2] = grayscale;
+        }
+
+        // Put the modified image data back onto the canvas
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+
     function convertToLego(image, studSize) {
-        const imgWidth = image.width;
-        const imgHeight = image.height;
+        let imgWidth = image.width;
+        let imgHeight = image.height;
+        let aspect_ratio = imgWidth/imgHeight
+
+        //handle image aspect
+        if ( (imgHeight/studSize) < 16 * useImageStore().height ) {
+            console.log("height")
+            console.log( (useImageStore().height*16 - (imgHeight / studSize)) * studSize )
+            imgHeight = imgHeight + (useImageStore().height*16 - (imgHeight / studSize)) * studSize
+            imgWidth = imgHeight*aspect_ratio
+        }
 
         // Calculate the number of studs in both dimensions
-        const numStudsX = Math.ceil(imgWidth / studSize);
-        const numStudsY = Math.ceil(imgHeight / studSize);
+        let numStudsX = Math.ceil(imgWidth / studSize);
+        let numStudsY = Math.ceil(imgHeight / studSize);
+
 
         // Set canvas dimensions to match the number of studs
         canvas.width = numStudsX * studSize;
@@ -305,8 +346,12 @@ let rememberedColorToggle = true
         // Draw the image on the canvas
         ctx.drawImage(image, useImageStore().x, useImageStore().y, canvas.width, canvas.height);
 
+        //image adjustment
         changeBrightness(useImageStore().brightness);
         changeContrast(useImageStore().contrast);
+        if (useImageStore().grayscale) {
+            applyGrayscaleFilter(ctx);
+        }
 
         useImageStore().allColorOptions.forEach((item,i) => {
             useImageStore().allColorOptions[i].count = 0
@@ -321,25 +366,63 @@ let rememberedColorToggle = true
                 const studX = x * studSize;
                 const studY = y * studSize;
 
+                //console.log(x+1)
+                //console.log(y+1)
+
                 // Get the average color of the cell
                 const cellColor = getAverageColor(ctx, studX, studY, studSize, studSize);
                 const legoColorEquivilant = findClosestColor(cellColor, getColorArray())
+
                 // Draw the stud with the closest LEGO color
-                ctx.fillStyle = legoColorEquivilant
+                if (useImageStore().showStuds) {
+                    ctx.fillStyle = legoColorEquivilant    
+                    ctx.fillRect(studX, studY, studSize, studSize);  // Draw a rectangle
+                    ctx.fillStyle = "rgba(255,255,255,0.1)";  // Change the fill color for the circle
+                    ctx.beginPath();
+                    ctx.arc(studX + studSize / 2, studY + studSize / 2, studSize / 3, 0, Math.PI * 2);  // Draw a circle inside the rectangle
+                    ctx.fill();
+                }
+                else {
+                    ctx.fillStyle = "rgba(0,0,0,1)"  
+                    ctx.fillRect(studX, studY, studSize, studSize);  // Draw a rectangle
+                    ctx.fillStyle = legoColorEquivilant;  // Change the fill color for the circle
+                    ctx.beginPath();
+                    ctx.arc(studX + studSize / 2, studY + studSize / 2, studSize / 2, 0, Math.PI * 2);  // Draw a circle inside the rectangle
+                    ctx.fill();
+                }
+
+                if (useImageStore().showGrid) {
+                    if ( x % 16 == 0 && x != 0 ) {
+                        ctx.fillStyle = "rgba(0,0,0,1)"  
+                        ctx.fillRect(studX, studY, 1, studSize);  // Draw a rectangle
+                    }
+
+                    if ( y % 16 == 0 && y != 0 ) {
+                        ctx.fillStyle = "rgba(0,0,0,1)"  
+                        ctx.fillRect(studX, studY, studSize, 1);  // Draw a rectangle
+                    }
+                }                
                 
+
                 if (legoColorEquivilant != 'rgba(0, 0, 0, 1)') {
                     let relatedColor = useImageStore().allColorOptions.indexOf(useImageStore().allColorOptions.find((arrayElem) => arrayElem.hexColor == rgbaToHex(legoColorEquivilant)))
                     useImageStore().allColorOptions[relatedColor].used = true
                     useImageStore().allColorOptions[relatedColor].count += 1
                 }
-                
-                ctx.fillRect(studX, studY, studSize, studSize);  // Draw a rectangle
-                ctx.fillStyle = "rgba(255,255,255,0.1)";  // Change the fill color for the circle
-                ctx.beginPath();
-                ctx.arc(studX + studSize / 2, studY + studSize / 2, studSize / 3, 0, Math.PI * 2);  // Draw a circle inside the rectangle
-                ctx.fill();
             }
         }
+        }
+
+        preview_image = document.getElementById('preview-image')
+        image_container = document.getElementById('image-container')
+        legoCanvas = document.getElementById('legoCanvas');
+        legoCtx = legoCanvas.getContext('2d');
+
+        if(useImageStore().previewArtOnWall == true) {
+            let scale = preview_image.offsetWidth/300
+
+            image_container.style.width = ((0.80*16)*useImageStore().width).toFixed(1) * scale + "px"
+            image_container.style.height = ((0.80*16)*useImageStore().height).toFixed(1) * scale + "px"
         }
 
         //disabled unused colors
@@ -350,6 +433,10 @@ let rememberedColorToggle = true
                 //useImageStore().allColorOptions[i].count = 0
             }
         })
+
+        //indsæt preview image
+        //const dataURL = canvas.toDataURL('image/png');
+        //preview_mosaic.src = dataURL;
 
         return canvas;
     }
