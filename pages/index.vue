@@ -485,6 +485,7 @@ const isProcessing = ref(false)
 let processingGeneration = 0
 let currentStudSize = 8
 let convertDebounceTimer = null
+const baseURL = useRuntimeConfig().app.baseURL
 
     onMounted(() => {
 
@@ -503,7 +504,7 @@ let convertDebounceTimer = null
         contrastInput = document.getElementById('contrast'); 
         preview_mosaic = document.getElementById('preview-mosaic')
 
-        mosaicWorker = new Worker('/mosaic.worker.js');
+        mosaicWorker = new Worker(baseURL + 'mosaic.worker.js');
         mosaicWorker.onmessage = handleWorkerMessage;
 
     })
@@ -1033,7 +1034,7 @@ let convertDebounceTimer = null
         try {
             
             //csv to array of obj's
-            const response = await fetch('/LEGO_Colors.csv');
+            const response = await fetch(baseURL + 'LEGO_Colors.csv');
             const csvString  = await response.text()
 
             const rows = csvString.split(/\r?\n/).filter(row => row.trim() !== '');
