@@ -1389,7 +1389,7 @@ const baseURL = useRuntimeConfig().app.baseURL
             if (typeof CompressionStream !== 'undefined') { data = await deflate(raw); prefix = 'z' }
             const encoded = prefix + arrayToBase64url(data)
             const url = new URL(window.location.href)
-            url.searchParams.set('plan', encoded)
+            url.hash = 'plan=' + encoded
             await navigator.clipboard.writeText(url.toString())
             shareStatus.value = 'copied'
             setTimeout(() => { shareStatus.value = 'idle' }, 3000)
@@ -1401,7 +1401,9 @@ const baseURL = useRuntimeConfig().app.baseURL
     }
 
     async function importPlanFromURL() {
-        const planStr = new URLSearchParams(window.location.search).get('plan')
+        const hash = window.location.hash.slice(1) // strip leading #
+        const hashParams = new URLSearchParams(hash)
+        const planStr = hashParams.get('plan')
         if (!planStr || planStr.length < 4) return
         try {
             const prefix = planStr[0]
