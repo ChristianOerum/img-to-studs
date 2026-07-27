@@ -1389,7 +1389,8 @@ const baseURL = useRuntimeConfig().app.baseURL
             if (typeof CompressionStream !== 'undefined') { data = await deflate(raw); prefix = 'z' }
             const encoded = prefix + arrayToBase64url(data)
             const url = new URL(window.location.href)
-            url.hash = 'plan=' + encoded
+            url.search = ''              // clear any stale ?plan= so it never reaches the server
+            url.hash = 'plan=' + encoded // put data in the fragment — never sent to server
             await navigator.clipboard.writeText(url.toString())
             shareStatus.value = 'copied'
             setTimeout(() => { shareStatus.value = 'idle' }, 3000)
@@ -1401,9 +1402,10 @@ const baseURL = useRuntimeConfig().app.baseURL
     }
 
     async function importPlanFromURL() {
-        const hash = window.location.hash.slice(1) // strip leading #
-        const hashParams = new URLSearchParams(hash)
-        const planStr = hashParams.get('plan')
+        // Primary: read from URL hash (#plan=…) — this is what exportPlanURL writes.
+        // Fallback: legacy ?plan=… query-string links (caused HTTP 414; kept for backward compat).
+        const hashParams = new URLSearchParams(window.location.hash.slice(1))
+        const planStr = hashParams.get('plan') ?? new URLSearchParams(window.location.search).get('plan')
         if (!planStr || planStr.length < 4) return
         try {
             const prefix = planStr[0]
@@ -1478,10 +1480,20 @@ const baseURL = useRuntimeConfig().app.baseURL
             img.onload = () => {
                 originalImage.src = img.src;
                 originalImageSrc.value = img.src;
-                // Use natural image dimensions — NOT the rendered thumbnail size
-                const aspect_ratio = img.naturalHeight / img.naturalWidth;
-                img.width = (16 * 8) * useImageStore().width;
-                img.height = (16 * 8) * useImageStore().width * aspect_ratio;
+                // Scale image to cover the target canvas (preserve aspect ratio)
+                const targetW = (16 * 8) * useImageStore().width;
+                const targetH = (16 * 8) * useImageStore().height;
+                const imgAspect = img.naturalWidth / img.naturalHeight;
+                const canvasAspect = targetW / targetH;
+                if (imgAspect > canvasAspect) {
+                    // Image wider than target — fit height, let width overflow
+                    img.height = targetH;
+                    img.width  = targetH * imgAspect;
+                } else {
+                    // Image taller than target — fit width, let height overflow
+                    img.width  = targetW;
+                    img.height = targetW / imgAspect;
+                }
                 convertToLego(img, 8);
             };
             img.src = e.target.result;
@@ -1545,32 +1557,20 @@ const baseURL = useRuntimeConfig().app.baseURL
 
 
     function convertToLego(image, studSize) {
-        let imgWidth = image.width;
-        let imgHeight = image.height;
-        let aspect_ratio = imgWidth/imgHeight
-
-        //handle image aspect
-        if ( (imgHeight/studSize) < 16 * useImageStore().height ) {
-            console.log("height")
-            console.log( (useImageStore().height*16 - (imgHeight / studSize)) * studSize )
-            imgHeight = imgHeight + (useImageStore().height*16 - (imgHeight / studSize)) * studSize
-            imgWidth = imgHeight*aspect_ratio
-        }
-
-        // Calculate the number of studs in both dimensions
-        let numStudsX = Math.ceil(imgWidth / studSize);
-        let numStudsY = Math.ceil(imgHeight / studSize);
+        // Always size the canvas to exactly the configured baseplate dimensions
+        let numStudsX = 16 * useImageStore().width;
+        let numStudsY = 16 * useImageStore().height;
 
 
         // Set canvas dimensions to match the number of studs
         canvas.width = numStudsX * studSize;
         canvas.height = numStudsY * studSize;
-        // Expose to the overlay so it can size itself correctly
-        overlayImgCanvasW.value = canvas.width
-        overlayImgCanvasH.value = canvas.height
+        // Expose the cover-scaled image dimensions to the overlay (not the canvas clip size)
+        overlayImgCanvasW.value = image.width
+        overlayImgCanvasH.value = image.height
 
-        // Draw the image on the canvas
-        ctx.drawImage(image, useImageStore().x, useImageStore().y, canvas.width, canvas.height);
+        // Draw the image at its cover-scaled size (aspect ratio preserved, canvas clips the overflow)
+        ctx.drawImage(image, useImageStore().x, useImageStore().y, image.width, image.height);
 
         //image adjustment
         changeBrightness(useImageStore().brightness);
