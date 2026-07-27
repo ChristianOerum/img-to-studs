@@ -280,6 +280,22 @@
                         <span class="text-sm text-zinc-400 truncate flex-1">16×16 Baseplate</span>
                         <span class="text-xs text-zinc-500 shrink-0">{{ formatPrice(useImageStore().width * useImageStore().height * 30) }}</span>
                     </div>
+
+                    <!-- Border frame pieces -->
+                    <template v-if="borderPiecesData.length">
+                        <template v-for="group in borderPiecesData" :key="group.id">
+                            <p class="text-[10px] text-zinc-500 tracking-widest mb-2 mt-3">{{ group.label }}</p>
+                            <div class="flex flex-col gap-1.5 mb-1">
+                                <div v-for="item in group.items" :key="item.blId" class="flex items-center gap-2">
+                                    <div class="h-3.5 w-3.5 rounded shrink-0 ring-1 ring-white/10 bg-zinc-950"></div>
+                                    <span class="text-sm text-white font-semibold shrink-0">{{ item.count }}×</span>
+                                    <span class="text-sm text-zinc-400 truncate flex-1">{{ item.label }}</span>
+                                    <span class="text-xs text-zinc-500 shrink-0">{{ item.cost }}</span>
+                                </div>
+                            </div>
+                        </template>
+                    </template>
+
                     <p class="text-[10px] text-zinc-600 leading-relaxed mt-4">
                         Prices are estimates based on average retail costs and may vary. Not sourced from live data.
                     </p>
@@ -321,6 +337,27 @@
                                     :class="selectedBP === (r-1)*useImageStore().width+(c-1) ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'"
                                 >{{ String.fromCharCode(64+r) }}{{ c }}</button>
                             </template>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-800 pt-3">
+                        <p class="text-[10px] text-zinc-500 uppercase tracking-widest mb-2">Display</p>
+                        <div class="flex flex-col gap-2 mb-3">
+                            <label class="flex items-center justify-between cursor-pointer">
+                                <span class="text-xs text-zinc-300">Brick outlines</span>
+                                <div class="relative inline-flex items-center shrink-0">
+                                    <input type="checkbox" v-model="showPlanOutlines" class="sr-only peer">
+                                    <div class="w-9 h-5 bg-zinc-700 rounded-full peer peer-checked:bg-amber-500 transition-colors"></div>
+                                    <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+                                </div>
+                            </label>
+                            <label class="flex items-center justify-between cursor-pointer">
+                                <span class="text-xs text-zinc-300">16×16 grid</span>
+                                <div class="relative inline-flex items-center shrink-0">
+                                    <input type="checkbox" v-model="showPlanGrid" class="sr-only peer">
+                                    <div class="w-9 h-5 bg-zinc-700 rounded-full peer peer-checked:bg-amber-500 transition-colors"></div>
+                                    <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+                                </div>
+                            </label>
                         </div>
                     </div>
                     <div class="border-t border-zinc-800 pt-3">
@@ -470,6 +507,63 @@ const L_CELLS_MAIN = [
     [[1,0],[0,1],[1,1]], // orientation 3: missing top-left (post-process only)
 ]
 
+// ── Border frame part definitions (all Black, BL color 11) ──────────────────
+// Layer 1: 2×N plates that sit at the base, 1 stud on the baseplate + 1 stud sticking out
+const BORDER_2XN_DEFS = [
+    { n: 16, blId: '4282',  label: '2×16 Plate', priceDKK: 3.00 },
+    { n: 12, blId: '2445',  label: '2×12 Plate', priceDKK: 2.50 },
+    { n: 10, blId: '3832',  label: '2×10 Plate', priceDKK: 2.00 },
+    { n:  8, blId: '3034',  label: '2×8 Plate',  priceDKK: 1.50 },
+    { n:  6, blId: '3795',  label: '2×6 Plate',  priceDKK: 1.00 },
+    { n:  4, blId: '3020',  label: '2×4 Plate',  priceDKK: 0.60 },
+    { n:  3, blId: '3021',  label: '2×3 Plate',  priceDKK: 0.50 },
+    { n:  2, blId: '3022',  label: '2×2 Plate',  priceDKK: 0.40 },
+    { n:  1, blId: '3023',  label: '1×2 Plate',  priceDKK: 0.25 },
+]
+// Layers 3-4: 1×N plates (two layers on top of the brick row)
+const BORDER_PLATE_1XN_DEFS = [
+    { n: 8, blId: '3460',  label: '1×8 Plate',  priceDKK: 0.75 },
+    { n: 6, blId: '3666',  label: '1×6 Plate',  priceDKK: 0.60 },
+    { n: 4, blId: '3710',  label: '1×4 Plate',  priceDKK: 0.35 },
+    { n: 3, blId: '3623',  label: '1×3 Plate',  priceDKK: 0.30 },
+    { n: 2, blId: '3023',  label: '1×2 Plate',  priceDKK: 0.25 },
+    { n: 1, blId: '3024',  label: '1×1 Plate',  priceDKK: 0.15 },
+]
+// Layer 5: 1×N tiles (smooth top finish)
+const BORDER_TILE_1XN_DEFS = [
+    { n: 4, blId: '2431',  label: '1×4 Tile',   priceDKK: 0.50 },
+    { n: 3, blId: '63864', label: '1×3 Tile',   priceDKK: 0.40 },
+    { n: 2, blId: '3069',  label: '1×2 Tile',   priceDKK: 0.35 },
+    { n: 1, blId: '3070',  label: '1×1 Tile',   priceDKK: 0.30 },
+]
+const BORDER_PIN_BRICK_DEF = { blId: '2458', label: '1×2 Brick w/ Pin', priceDKK: 0.50 }
+const BORDER_TECH_PIN_DEF  = { blId: '2780', label: 'Technic Pin',      priceDKK: 0.20 }
+
+// Greedy-pack a single run of `length` studs using the given defs (sorted descending by n)
+function borderPackRun(length, defs) {
+    const items = []
+    let rem = length
+    for (const def of defs) {
+        if (rem <= 0) break
+        const cnt = Math.floor(rem / def.n)
+        if (cnt > 0) {
+            items.push({ blId: def.blId, label: def.label, priceDKK: def.priceDKK, count: cnt })
+            rem -= cnt * def.n
+        }
+    }
+    return items
+}
+// Merge two item arrays by blId (summing counts for matching parts)
+function borderMergeItems(a, b) {
+    const map = new Map()
+    for (const arr of [a, b]) {
+        for (const item of arr) {
+            if (map.has(item.blId)) map.get(item.blId).count += item.count
+            else map.set(item.blId, { ...item })
+        }
+    }
+    return [...map.values()]
+}
 // ── Binary compression helpers for URL export ──
 async function deflate(data) {
     const s = new CompressionStream('deflate-raw')
@@ -523,6 +617,8 @@ const enabledBrickIds = computed(() => {
 const storedPlacements  = ref(null)  // Int32Array (6 values per brick)
 const storedNumStudsX   = ref(0)
 const storedNumStudsY   = ref(0)
+const showPlanOutlines  = ref(true)
+const showPlanGrid      = ref(true)
 const buildPlanCanvasEl = ref(null)
 const buildPlanAreaEl   = ref(null)
 const selectedBP        = ref(-1)    // -1 = all, 0…n = baseplate index
@@ -536,6 +632,8 @@ let   buildRenderState  = { studSz: 8, originSX: 0, originSY: 0 }
 
 watch(selectedBP,        () => nextTick(renderBuildPlan))
 watch(storedPlacements,  buildLookupMap)
+watch(showPlanOutlines,  () => nextTick(renderBuildPlan))
+watch(showPlanGrid,      () => nextTick(renderBuildPlan))
 const isDraggingOverlay = ref(false)
 const legoCanvasEl = ref(null)
 const wallContainerEl = ref(null)
@@ -660,6 +758,89 @@ const locales = {
     'no':    { currency: 'NOK', flag: '🇳🇴', rate: 1.04 },
 }
 
+// ── Border frame computed pieces ────────────────────────────────────────────
+const borderPiecesData = computed(() => {
+    const W = useImageStore().width
+    const H = useImageStore().height
+    if (!W || !H) return []
+
+    // Horizontal runs (top + bottom): each 16W studs, flush with mosaic edges
+    // Vertical runs (left + right):   each 16H studs
+    // "Sticking out 1 stud" is the depth of the 2×N plate, not its length
+    const hLen = 16 * W
+    const vLen = 16 * H
+    // Horizontal plate/tile runs include the 4 frame corners; vertical runs fit between them (-2 studs)
+    const vLenInner = vLen - 2
+    // Total BP outer sections across all 4 runs (each 16-stud baseplate edge on the perimeter)
+    const bpSections = 2 * (W + H)
+
+    // Layer 1: 2×N base plates — greedy pack, 2 runs each direction
+    const basePlates = borderMergeItems(
+        borderPackRun(hLen,      BORDER_2XN_DEFS).map(i => ({ ...i, count: i.count * 2 })),
+        borderPackRun(vLenInner, BORDER_2XN_DEFS).map(i => ({ ...i, count: i.count * 2 }))
+    )
+
+    // Layer 2: brick row — per BP section: 1 pin brick + 1×12 + 1×2 filling the 14-stud remainder
+    // Corner baseplates appear in 2 runs → get 2 pins total; non-corner outer BPs appear in 1 run → 1 pin
+    // 4 × 1×1 bricks fill the 4 frame corners (shared position between horizontal and vertical runs)
+    const regularBricks = [
+        { blId: '6112', label: '1×12 Brick', priceDKK: 1.50, count: bpSections },
+        { blId: '3004', label: '1×2 Brick',  priceDKK: 0.30, count: bpSections },
+        { blId: '3005', label: '1×1 Brick',  priceDKK: 0.20, count: 4 },
+    ]
+    const pinBricks = [{ ...BORDER_PIN_BRICK_DEF, count: bpSections }]
+
+    // Layers 3-4: two 1×N plate layers (staggered for strength)
+    // Both use straight greedy packs (×4 = 2 layers × 2 runs per direction).
+    // Stagger achieved by 4 constant corner 1×4 plates (one per frame corner, layer 4 only).
+    // Formula: 8(W+H)−4 × 1×8 | 4 × 1×6 | 4 × 1×4 — verified for W=H=5.
+    const plateLayers = borderMergeItems(
+        borderMergeItems(
+            borderPackRun(hLen,      BORDER_PLATE_1XN_DEFS).map(i => ({ ...i, count: i.count * 4 })),
+            borderPackRun(vLenInner, BORDER_PLATE_1XN_DEFS).map(i => ({ ...i, count: i.count * 4 }))
+        ),
+        [{ blId: '3710', label: '1×4 Plate', priceDKK: 0.35, count: 4 }]
+    )
+
+    // Layer 5: 1×N tiles — greedy pack + 2 constant corner stagger pieces (1×4)
+    // Formula: 8(W+H) × 1×4  +  2 × 1×2 — verified for W=H=5.
+    const tiles = borderMergeItems(
+        borderMergeItems(
+            borderPackRun(hLen,      BORDER_TILE_1XN_DEFS).map(i => ({ ...i, count: i.count * 2 })),
+            borderPackRun(vLenInner, BORDER_TILE_1XN_DEFS).map(i => ({ ...i, count: i.count * 2 }))
+        ),
+        [{ blId: '2431', label: '1×4 Tile', priceDKK: 0.50, count: 2 }]
+    )
+
+    // Baseplate connectors
+    const adjPairs = H * Math.max(0, W - 1) + W * Math.max(0, H - 1)
+    const innerCorners = Math.max(0, W - 1) * Math.max(0, H - 1)
+    const connectorItems = []
+    if (innerCorners > 0) connectorItems.push({ blId: '3031', label: '4×4 Plate', priceDKK: 1.50, count: innerCorners })
+    if (adjPairs    > 0) connectorItems.push({ blId: '3020', label: '2×4 Plate', priceDKK: 0.60, count: adjPairs    })
+    if (adjPairs    > 0) connectorItems.push({ ...BORDER_TECH_PIN_DEF,            count: 2 * adjPairs               })
+
+    function withCost(items) {
+        return items.map(i => ({ ...i, cost: formatPrice(i.count * i.priceDKK) }))
+    }
+
+    return [
+        { id: 'border-base',    label: 'BORDER BASE PLATES (2×N)',      items: withCost(basePlates)      },
+        { id: 'border-bricks',  label: 'BORDER BRICKS (1×N)',           items: withCost(regularBricks)   },
+        { id: 'border-pin',     label: 'BORDER PIN BRICKS',             items: withCost(pinBricks)       },
+        { id: 'border-plates',  label: 'BORDER PLATES (1×N, 2 LAYERS)', items: withCost(plateLayers)     },
+        { id: 'border-tiles',   label: 'BORDER TILES (1×N)',            items: withCost(tiles)           },
+        { id: 'border-technic', label: 'BASEPLATE CONNECTORS',          items: withCost(connectorItems)  },
+    ].filter(g => g.items.length > 0)
+})
+
+const borderPiecesTotal = computed(() =>
+    borderPiecesData.value.reduce((sum, g) => sum + g.items.reduce((s, i) => s + i.count, 0), 0)
+)
+const borderPriceDKK = computed(() =>
+    borderPiecesData.value.reduce((sum, g) => sum + g.items.reduce((s, i) => s + i.count * i.priceDKK, 0), 0)
+)
+
 const totalPrice = computed(() => {
     let tileDKK
     if (brickCountsData.value) {
@@ -674,7 +855,7 @@ const totalPrice = computed(() => {
         tileDKK = 0.25 * (16 * useImageStore().width) * (16 * useImageStore().height)
     }
     const baseplateDKK = 30 * useImageStore().width * useImageStore().height
-    const totalDKK = tileDKK + baseplateDKK
+    const totalDKK = tileDKK + baseplateDKK + borderPriceDKK.value
     const converted = totalDKK * locales[selectedLocale.value].rate
     return `≈${converted.toFixed(1)} ${locales[selectedLocale.value].currency}`
 })
@@ -683,7 +864,7 @@ const totalPiecesCount = computed(() => {
     if (!brickCountsData.value) return (16 * useImageStore().width) * (16 * useImageStore().height)
     let total = 0
     for (let i = 0; i < brickCountsData.value.length; i++) total += brickCountsData.value[i]
-    return total
+    return total + borderPiecesTotal.value
 })
 
 const piecesData = computed(() => {
@@ -1017,6 +1198,7 @@ const baseURL = useRuntimeConfig().app.baseURL
         }
 
         // ── Pass 2: Outlines (drawn after all fills so they're never buried) ──
+        if (showPlanOutlines.value) {
         ctx.strokeStyle = 'rgba(0,0,0,0.78)'
         ctx.lineWidth   = outlineW
         for (let i = 0; i < numP; i++) {
@@ -1077,6 +1259,7 @@ const baseURL = useRuntimeConfig().app.baseURL
                 ctx.strokeRect(px + hw, py + hw, w*studSz - outlineW, h*studSz - outlineW)
             }
         }
+        } // end showPlanOutlines
 
         // ── Pass 3: Stud knobs ───────────────────────────────────────────
         if (drawKnobs) {
@@ -1110,11 +1293,13 @@ const baseURL = useRuntimeConfig().app.baseURL
         // ── Baseplate grid & labels ──────────────────────────────────────
         if (selectedBP.value < 0) {
             // White dividing lines between baseplates
+            if (showPlanGrid.value) {
             ctx.fillStyle = 'rgba(255,255,255,0.75)'
             for (let gx = 16; gx < nX; gx += 16) ctx.fillRect(gx*studSz - 1, 0, 2, cssH)
             for (let gy = 16; gy < nY; gy += 16) ctx.fillRect(0, gy*studSz - 1, cssW, 2)
+            }
             // Plate ID labels
-            if (studSz >= 5) {
+            if (showPlanGrid.value && studSz >= 5) {
                 const fs = Math.min(11, studSz * 1.6)
                 ctx.font = `bold ${fs}px sans-serif`
                 ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
@@ -1664,7 +1849,18 @@ const baseURL = useRuntimeConfig().app.baseURL
 
     function buildBricklinkXML() {
         // BrickLink XML format must NOT have an XML declaration — see bricklink.com/help.asp?helpID=207
-        let xml = '<INVENTORY>\n'
+        // Collect all items into a map keyed by "blId:color" to avoid duplicate item/color entries
+        const itemMap = new Map() // key → { blId, color, qty, remarks[] }
+        function addItem(blId, color, qty, remark) {
+            const key = `${blId}:${color}`
+            if (itemMap.has(key)) {
+                const entry = itemMap.get(key)
+                entry.qty += qty
+                if (remark && !entry.remarks.includes(remark)) entry.remarks.push(remark)
+            } else {
+                itemMap.set(key, { blId, color, qty, remarks: remark ? [remark] : [] })
+            }
+        }
 
         if (brickCountsData.value) {
             const numC = useImageStore().allColorOptions.length
@@ -1674,14 +1870,7 @@ const baseURL = useRuntimeConfig().app.baseURL
                     if (!cnt) return
                     const blColor = BRICKLINK_COLORS[colorOpt.colorName]
                     if (blColor === undefined) return
-                    xml += '  <ITEM>\n'
-                    xml += '    <ITEMTYPE>P</ITEMTYPE>\n'
-                    xml += `    <ITEMID>${brick.blId}</ITEMID>\n`
-                    xml += `    <COLOR>${blColor}</COLOR>\n`
-                    xml += `    <MINQTY>${cnt}</MINQTY>\n`
-                    xml += `    <CONDITION>${bricklinkAllowUsed.value ? 'X' : 'N'}</CONDITION>\n`
-                    xml += `    <REMARKS>${escapeXML(colorOpt.colorName)} ${brick.label}</REMARKS>\n`
-                    xml += '  </ITEM>\n'
+                    addItem(brick.blId, blColor, cnt, `${escapeXML(colorOpt.colorName)} ${brick.label}`)
                 })
             })
         } else {
@@ -1690,29 +1879,36 @@ const baseURL = useRuntimeConfig().app.baseURL
                 if (item.count <= 0) return
                 const blColor = BRICKLINK_COLORS[item.colorName]
                 if (blColor === undefined) return
-                xml += '  <ITEM>\n'
-                xml += '    <ITEMTYPE>P</ITEMTYPE>\n'
-                xml += '    <ITEMID>3024</ITEMID>\n'
-                xml += `    <COLOR>${blColor}</COLOR>\n`
-                xml += `    <MINQTY>${item.count}</MINQTY>\n`
-                xml += `    <CONDITION>${bricklinkAllowUsed.value ? 'X' : 'N'}</CONDITION>\n`
-                xml += `    <REMARKS>${escapeXML(item.colorName)}</REMARKS>\n`
-                xml += '  </ITEM>\n'
+                addItem('3024', blColor, item.count, escapeXML(item.colorName))
             })
         }
 
         // 16×16 baseplates (item 65803) — any color for cheapest price
         const baseplateCount = useImageStore().width * useImageStore().height
         if (baseplateCount > 0) {
-            xml += '  <ITEM>\n'
-            xml += '    <ITEMTYPE>P</ITEMTYPE>\n'
-            xml += '    <ITEMID>65803</ITEMID>\n'
-            xml += `    <MINQTY>${baseplateCount}</MINQTY>\n`
-            xml += `    <CONDITION>${bricklinkAllowUsed.value ? 'X' : 'N'}</CONDITION>\n`
-            xml += '    <REMARKS>16x16 Baseplate (any color)</REMARKS>\n'
-            xml += '  </ITEM>\n'
+            addItem('65803', 0, baseplateCount, '16x16 Baseplate (any color)')
         }
 
+        // Border frame pieces (all Black, BL color 11)
+        for (const group of borderPiecesData.value) {
+            for (const item of group.items) {
+                addItem(item.blId, 11, item.count, `${escapeXML(item.label)} (Border)`)
+            }
+        }
+
+        // Emit deduplicated items
+        let xml = '<INVENTORY>\n'
+        const cond = bricklinkAllowUsed.value ? 'X' : 'N'
+        for (const { blId, color, qty, remarks } of itemMap.values()) {
+            xml += '  <ITEM>\n'
+            xml += '    <ITEMTYPE>P</ITEMTYPE>\n'
+            xml += `    <ITEMID>${blId}</ITEMID>\n`
+            if (color !== 0) xml += `    <COLOR>${color}</COLOR>\n`
+            xml += `    <MINQTY>${qty}</MINQTY>\n`
+            xml += `    <CONDITION>${cond}</CONDITION>\n`
+            if (remarks.length) xml += `    <REMARKS>${remarks.join(' + ')}</REMARKS>\n`
+            xml += '  </ITEM>\n'
+        }
         xml += '</INVENTORY>'
         return xml
     }
