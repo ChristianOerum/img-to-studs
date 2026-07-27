@@ -24,9 +24,9 @@
                         </p>
                     </div>
                     <div class="bg-zinc-800 rounded-lg px-2.5 py-2">
-                        <p class="text-[9px] text-zinc-500 uppercase tracking-widest leading-none mb-1">Plates</p>
+                        <p class="text-[9px] text-zinc-500 uppercase tracking-widest leading-none mb-1">Pieces</p>
                         <p class="text-xs font-semibold text-white leading-none">
-                            {{ (16 * useImageStore().width) * (16 * useImageStore().height) }}
+                            {{ totalPiecesCount }}
                         </p>
                     </div>
                     <div @click="useMenuStore().menuItemShow = 'P'" class="bg-zinc-800 rounded-lg px-2.5 py-2 cursor-pointer hover:bg-zinc-700 transition-colors">
@@ -38,15 +38,17 @@
                 <!-- Toggle buttons + locale -->
                 <div class="flex items-center gap-1.5 flex-wrap">
                     <button
-                        @click="useImageStore().previewShowMosaic = !useImageStore().previewShowMosaic; initConvert()"
+                        @click="toggleMosaic()"
+                        :title="isViewOnly ? 'This mosaic was exported and can no longer be edited' : ''"
                         class="px-2.5 py-1 rounded-full text-xs font-semibold transition-colors"
-                        :class="useImageStore().previewShowMosaic ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'"
+                        :class="[useImageStore().previewShowMosaic ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200', isViewOnly ? 'opacity-30 cursor-not-allowed' : '']"
                     >Mosaic</button>
 
                     <button
-                        @click="useImageStore().showGrid = !useImageStore().showGrid; initConvert()"
+                        @click="toggleGrid()"
+                        :title="isViewOnly ? 'This mosaic was exported and can no longer be edited' : ''"
                         class="px-2.5 py-1 rounded-full text-xs font-semibold transition-colors"
-                        :class="useImageStore().showGrid ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'"
+                        :class="[useImageStore().showGrid ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200', isViewOnly ? 'opacity-30 cursor-not-allowed' : '']"
                     >Grid</button>
 
                     <button
@@ -63,12 +65,13 @@
             </div>
 
             <!-- Nav tabs -->
-            <div class="grid grid-cols-5 border-b border-zinc-800 shrink-0">
+            <div class="grid grid-cols-6 border-b border-zinc-800 shrink-0">
 
                 <button
-                    @click="useMenuStore().menuItemShow = 'SI'"
+                    @click="!isViewOnly && (useMenuStore().menuItemShow = 'SI')"
+                    :title="isViewOnly ? 'This mosaic was exported and can no longer be edited' : ''"
                     class="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium transition-colors relative"
-                    :class="useMenuStore().menuItemShow === 'SI' ? 'text-amber-400' : 'text-zinc-500 hover:text-zinc-300'"
+                    :class="[useMenuStore().menuItemShow === 'SI' ? 'text-amber-400' : 'text-zinc-500 hover:text-zinc-300', isViewOnly ? 'opacity-30 cursor-not-allowed' : '']"
                 >
                     <Icon name="material-symbols:image-outline-rounded" class="text-[17px]" />
                     <span>Image</span>
@@ -76,9 +79,10 @@
                 </button>
 
                 <button
-                    @click="useMenuStore().menuItemShow = 'S'"
+                    @click="!isViewOnly && (useMenuStore().menuItemShow = 'S')"
+                    :title="isViewOnly ? 'This mosaic was exported and can no longer be edited' : ''"
                     class="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium transition-colors relative"
-                    :class="useMenuStore().menuItemShow === 'S' ? 'text-amber-400' : 'text-zinc-500 hover:text-zinc-300'"
+                    :class="[useMenuStore().menuItemShow === 'S' ? 'text-amber-400' : 'text-zinc-500 hover:text-zinc-300', isViewOnly ? 'opacity-30 cursor-not-allowed' : '']"
                 >
                     <Icon name="iconoir:add-frame" class="text-[17px]" />
                     <span>Size</span>
@@ -86,9 +90,10 @@
                 </button>
 
                 <button
-                    @click="useMenuStore().menuItemShow = 'AI'"
+                    @click="!isViewOnly && (useMenuStore().menuItemShow = 'AI')"
+                    :title="isViewOnly ? 'This mosaic was exported and can no longer be edited' : ''"
                     class="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium transition-colors relative"
-                    :class="useMenuStore().menuItemShow === 'AI' ? 'text-amber-400' : 'text-zinc-500 hover:text-zinc-300'"
+                    :class="[useMenuStore().menuItemShow === 'AI' ? 'text-amber-400' : 'text-zinc-500 hover:text-zinc-300', isViewOnly ? 'opacity-30 cursor-not-allowed' : '']"
                 >
                     <Icon name="streamline:interface-setting-slider-vertical-adjustment-adjust-controls-fader-vertical-settings-slider" class="text-[17px]" />
                     <span>Adjust</span>
@@ -96,9 +101,10 @@
                 </button>
 
                 <button
-                    @click="useMenuStore().menuItemShow = 'C'"
+                    @click="!isViewOnly && (useMenuStore().menuItemShow = 'C')"
+                    :title="isViewOnly ? 'This mosaic was exported and can no longer be edited' : ''"
                     class="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium transition-colors relative"
-                    :class="useMenuStore().menuItemShow === 'C' ? 'text-amber-400' : 'text-zinc-500 hover:text-zinc-300'"
+                    :class="[useMenuStore().menuItemShow === 'C' ? 'text-amber-400' : 'text-zinc-500 hover:text-zinc-300', isViewOnly ? 'opacity-30 cursor-not-allowed' : '']"
                 >
                     <Icon name="mingcute:color-picker-line" class="text-[17px]" />
                     <span>Colors</span>
@@ -113,6 +119,16 @@
                     <Icon name="tabler:lego" class="text-[17px]" />
                     <span>Pieces</span>
                     <div v-if="useMenuStore().menuItemShow === 'P'" class="absolute bottom-0 left-1 right-1 h-0.5 bg-amber-400 rounded-full"></div>
+                </button>
+
+                <button
+                    @click="openPlanTab()"
+                    class="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium transition-colors relative"
+                    :class="useMenuStore().menuItemShow === 'B' ? 'text-amber-400' : 'text-zinc-500 hover:text-zinc-300'"
+                >
+                    <Icon name="material-symbols:map-outline-rounded" class="text-[17px]" />
+                    <span>Plan</span>
+                    <div v-if="useMenuStore().menuItemShow === 'B'" class="absolute bottom-0 left-1 right-1 h-0.5 bg-amber-400 rounded-full"></div>
                 </button>
 
             </div>
@@ -151,6 +167,21 @@
                         <p class="text-xs text-zinc-500">
                             = {{ useImageStore().width * 16 }} × {{ useImageStore().height * 16 }} studs total
                         </p>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <p class="text-[10px] text-zinc-500 uppercase tracking-widest">Brick Sizes</p>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button
+                                v-for="b in brickSizeOptions"
+                                :key="b.id"
+                                @click="toggleBrickSize(b)"
+                                class="px-2.5 py-1 rounded-full text-xs font-semibold transition-colors"
+                                :class="b.enabled ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'"
+                                :title="b.id === '1x1' ? '1×1 is always required as fallback' : ''"
+                            >{{ b.label }}</button>
+                        </div>
+                        <p class="text-[10px] text-zinc-500 leading-relaxed">Larger bricks reduce cost. All bricks are confined to their 16×16 baseplate.</p>
                     </div>
                 </div>
 
@@ -228,17 +259,20 @@
 
                 <!-- Pieces -->
                 <div v-if="useMenuStore().menuItemShow === 'P'">
-                    <p class="text-[10px] text-zinc-500 tracking-widest mb-3">1x1 PLATES</p>
-                    <div class="flex flex-col gap-1.5 mb-4">
-                        <template v-for="(item, index) in useImageStore().allColorOptions" :key="index">
-                            <div v-if="item.count !== 0" class="flex items-center gap-2">
-                                <div class="h-3.5 w-3.5 rounded shrink-0 ring-1 ring-white/10" :style="{ backgroundColor: `rgba(${item.color.join(',')})` }"></div>
-                                <span class="text-sm text-white font-semibold shrink-0">{{ item.count }}×</span>
-                                <span class="text-sm text-zinc-400 truncate flex-1">{{ item.colorName }}</span>
-                                <span class="text-xs text-zinc-500 shrink-0">{{ formatPrice(item.count * 0.25) }}</span>
+                    <template v-if="piecesData.length">
+                        <template v-for="group in piecesData" :key="group.id">
+                            <p class="text-[10px] text-zinc-500 tracking-widest mb-2 mt-3 first:mt-0">{{ group.label.toUpperCase() }} PLATES</p>
+                            <div class="flex flex-col gap-1.5 mb-1">
+                                <div v-for="row in group.colorRows" :key="row.colorName" class="flex items-center gap-2">
+                                    <div class="h-3.5 w-3.5 rounded shrink-0 ring-1 ring-white/10" :style="{ backgroundColor: `rgba(${row.color.join(',')})` }"></div>
+                                    <span class="text-sm text-white font-semibold shrink-0">{{ row.count }}×</span>
+                                    <span class="text-sm text-zinc-400 truncate flex-1">{{ row.colorName }}</span>
+                                    <span class="text-xs text-zinc-500 shrink-0">{{ row.cost }}</span>
+                                </div>
                             </div>
                         </template>
-                    </div>
+                    </template>
+                    <p v-else class="text-xs text-zinc-600 mb-4">Upload an image to see piece counts.</p>
                     <p class="text-[10px] text-zinc-500 tracking-widest mb-3">16x16 BASEPLATES</p>
                     <div class="flex items-center gap-2">
                         <div class="h-3.5 w-3.5 rounded shrink-0 ring-1 ring-white/10 bg-zinc-600"></div>
@@ -253,9 +287,57 @@
                         <Icon :name="bricklinkCopied ? 'material-symbols:check-rounded' : 'material-symbols:content-copy-outline-rounded'" class="text-base" />
                         {{ bricklinkCopied ? 'Copied!' : 'Copy BrickLink Want List' }}
                     </button>
+                    <label class="flex items-center justify-between mt-3 cursor-pointer">
+                        <div>
+                            <p class="text-xs text-zinc-300 font-medium">Allow used bricks</p>
+                            <p class="text-[10px] text-zinc-500 leading-relaxed">Accepts new &amp; used — may reduce price significantly</p>
+                        </div>
+                        <div class="relative inline-flex items-center shrink-0">
+                            <input type="checkbox" v-model="bricklinkAllowUsed" class="sr-only peer">
+                            <div class="w-9 h-5 bg-zinc-700 rounded-full peer peer-checked:bg-amber-500 transition-colors"></div>
+                            <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+                        </div>
+                    </label>
                     <p class="text-[10px] text-zinc-600 leading-relaxed mt-2">
                         Paste at <span class="text-zinc-500">bricklink.com → Wanted List → Upload → "Upload BrickLink XML format"</span>
                     </p>
+                </div>
+
+                <!-- Plan -->
+                <div v-if="useMenuStore().menuItemShow === 'B'" class="flex flex-col gap-3">
+                    <div>
+                        <p class="text-[10px] text-zinc-500 uppercase tracking-widest mb-2">Select Baseplate</p>
+                        <div class="grid gap-1" :style="{ gridTemplateColumns: `repeat(${useImageStore().width}, minmax(0,1fr))` }">
+                            <button
+                                @click="selectBP(-1)"
+                                class="col-span-full py-1 rounded text-xs font-bold transition-colors"
+                                :class="selectedBP === -1 ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'"
+                            >All plates</button>
+                            <template v-for="r in useImageStore().height" :key="r">
+                                <button
+                                    v-for="c in useImageStore().width" :key="c"
+                                    @click="selectBP((r-1)*useImageStore().width + (c-1))"
+                                    class="py-1.5 rounded text-xs font-bold transition-colors"
+                                    :class="selectedBP === (r-1)*useImageStore().width+(c-1) ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'"
+                                >{{ String.fromCharCode(64+r) }}{{ c }}</button>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="border-t border-zinc-800 pt-3">
+                        <p class="text-[10px] text-zinc-500 uppercase tracking-widest mb-2">Share Build Plan</p>
+                        <button
+                            v-if="!isViewOnly"
+                            @click="exportPlanURL()"
+                            :disabled="!storedPlacements"
+                            class="w-full py-2 px-4 rounded-lg font-semibold text-xs transition-colors flex items-center justify-center gap-2 disabled:opacity-40"
+                            :class="shareStatus === 'copied' ? 'bg-green-500 text-white' : shareStatus === 'error' ? 'bg-red-500 text-white' : 'bg-amber-500 hover:bg-amber-400 text-zinc-950'"
+                        >
+                            <Icon :name="shareStatus === 'copied' ? 'material-symbols:check-rounded' : 'material-symbols:link'" class="text-base" />
+                            {{ shareStatus === 'copied' ? 'Link Copied!' : shareStatus === 'error' ? 'Copy Failed' : 'Export Mosaic Link' }}
+                        </button>
+                        <p v-if="isViewOnly" class="text-xs text-zinc-500 italic">Shared view — editing disabled.</p>
+                        <p class="text-[10px] text-zinc-600 leading-relaxed mt-2">All brick placements are encoded in the URL — no server needed.</p>
+                    </div>
                 </div>
 
             </div>
@@ -271,13 +353,46 @@
         </div>
 
         <!-- ── Canvas / Preview Area ─────────────────────────────────── -->
-        <div class="flex-1 min-w-0 overflow-auto no-scrollbar flex items-center justify-center p-6 relative">
+        <div class="flex-1 min-w-0 overflow-hidden no-scrollbar flex items-center justify-center p-6 relative">
+
+            <!-- Build Plan canvas (Plan tab) -->
+            <div
+                v-if="useMenuStore().menuItemShow === 'B'"
+                ref="buildPlanAreaEl"
+                class="w-full h-full flex flex-col gap-2 items-center"
+            >
+                <div class="shrink-0 flex items-center gap-1.5 flex-wrap justify-center">
+                    <button
+                        @click="selectBP(-1)"
+                        class="px-3 py-1.5 rounded-full text-xs font-bold transition-colors"
+                        :class="selectedBP === -1 ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white'"
+                    >All</button>
+                    <template v-for="r in useImageStore().height" :key="r">
+                        <button
+                            v-for="c in useImageStore().width" :key="c"
+                            @click="selectBP((r-1)*useImageStore().width + (c-1))"
+                            class="w-8 h-8 rounded text-xs font-bold transition-colors"
+                            :class="selectedBP === (r-1)*useImageStore().width+(c-1) ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white'"
+                        >{{ String.fromCharCode(64+r) }}{{ c }}</button>
+                    </template>
+                </div>
+                <div class="flex-1 min-h-0 flex items-center justify-center">
+                    <canvas
+                        ref="buildPlanCanvasEl"
+                        class="shadow-[0_0_80px_rgba(0,0,0,0.9)]"
+                        style="display:block; cursor:crosshair;"
+                        @mousemove="onBuildCanvasMouseMove"
+                        @mouseleave="onBuildCanvasMouseLeave"
+                    ></canvas>
+                </div>
+            </div>
 
             <canvas
                 v-if="!useImageStore().previewArtOnWall"
                 ref="legoCanvasEl"
                 id="legoCanvas"
                 class="max-w-full max-h-full shadow-[0_0_80px_rgba(0,0,0,0.9)]"
+                :style="useMenuStore().menuItemShow === 'B' ? { display: 'none' } : {}"
             ></canvas>
 
             <!-- Original image overlay for drag-to-reposition -->
@@ -316,16 +431,111 @@
 
     </div>
 
+    <!-- Build plan hover tooltip -->
+    <Teleport to="body">
+        <div
+            v-if="planTooltip.show"
+            class="fixed z-50 pointer-events-none flex items-center gap-2 bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 shadow-xl text-xs select-none"
+            :style="{ left: planTooltip.x + 'px', top: planTooltip.y + 'px' }"
+        >
+            <div class="w-3.5 h-3.5 rounded-sm shrink-0 ring-1 ring-white/20" :style="{ backgroundColor: planTooltip.colorRgba }"></div>
+            <span class="font-semibold text-white">{{ planTooltip.brickLabel }}</span>
+            <span class="text-zinc-400">· {{ planTooltip.colorName }}</span>
+        </div>
+    </Teleport>
+
 </template>
 
 <script setup>
 
 import { useImageStore } from '@/stores/ImageStore'
 import { useMenuStore } from '@/stores/ShowMenu'
-import { onMounted, onUnmounted, ref, computed } from 'vue';
+import { onMounted, onUnmounted, ref, computed, watch, nextTick } from 'vue';
+
+// ── Brick definitions — index order MUST match BRICK_DEFS in mosaic.worker.js ──
+const BRICK_DEFS_MAIN = [
+    { id: '6x6',  label: '6×6',        area: 36, blId: '3958',  priceDKK: 4.00  },
+    { id: '4x4',  label: '4×4',        area: 16, blId: '3031',  priceDKK: 1.50  },
+    { id: '2x3',  label: '2×3',        area: 6,  blId: '3021',  priceDKK: 0.50  },
+    { id: '2x2',  label: '2×2',        area: 4,  blId: '3022',  priceDKK: 0.40  },
+    { id: '2x2L', label: '2×2 Corner', area: 3,  blId: '2420',  priceDKK: 0.35  },
+    { id: '1x2',  label: '1×2',        area: 2,  blId: '3023',  priceDKK: 0.30  },
+    { id: '1x1',  label: '1×1',        area: 1,  blId: '3024',  priceDKK: 0.25  },
+]
+// L-piece cell offsets — must match worker L_CELLS
+const L_CELLS_MAIN = [
+    [[0,0],[0,1],[1,1]], // orientation 0: missing top-right
+    [[0,0],[1,0],[0,1]], // orientation 1: missing bottom-right
+    [[0,0],[1,0],[1,1]], // orientation 2: missing bottom-left
+    [[1,0],[0,1],[1,1]], // orientation 3: missing top-left (post-process only)
+]
+
+// ── Binary compression helpers for URL export ──
+async function deflate(data) {
+    const s = new CompressionStream('deflate-raw')
+    const w = s.writable.getWriter(); w.write(data); w.close()
+    const r = s.readable.getReader(); const chunks = []
+    for (;;) { const { done, value } = await r.read(); if (done) break; chunks.push(value) }
+    const out = new Uint8Array(chunks.reduce((n, c) => n + c.length, 0))
+    let off = 0; for (const c of chunks) { out.set(c, off); off += c.length }
+    return out
+}
+async function inflate(data) {
+    const s = new DecompressionStream('deflate-raw')
+    const w = s.writable.getWriter(); w.write(data); w.close()
+    const r = s.readable.getReader(); const chunks = []
+    for (;;) { const { done, value } = await r.read(); if (done) break; chunks.push(value) }
+    const out = new Uint8Array(chunks.reduce((n, c) => n + c.length, 0))
+    let off = 0; for (const c of chunks) { out.set(c, off); off += c.length }
+    return out
+}
+function arrayToBase64url(arr) {
+    let s = ''
+    for (let i = 0; i < arr.length; i++) s += String.fromCharCode(arr[i])
+    return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+}
+function base64urlToArray(str) {
+    const b64 = str.replace(/-/g, '+').replace(/_/g, '/') + '=='.slice(0, (4 - str.length % 4) % 4)
+    const raw = atob(b64); const arr = new Uint8Array(raw.length)
+    for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i)
+    return arr
+}
 
 const showOriginalOverlay = ref(false)
 const originalImageSrc = ref('')
+const brickCountsData = ref(null) // Int32Array from worker: [BRICK_DEFS.length × numColors]
+const brickSizeOptions = ref([
+    { id: '6x6',  label: '6×6',        enabled: false },
+    { id: '4x4',  label: '4×4',        enabled: true  },
+    { id: '2x3',  label: '2×3',        enabled: true  },
+    { id: '2x2',  label: '2×2',        enabled: true  },
+    { id: '2x2L', label: '2×2 Corner', enabled: true  },
+    { id: '1x2',  label: '1×2',        enabled: true  },
+    { id: '1x1',  label: '1×1',        enabled: true  }, // always on
+])
+const enabledBrickIds = computed(() => {
+    const ids = brickSizeOptions.value.filter(b => b.enabled).map(b => b.id)
+    if (!ids.includes('1x1')) ids.push('1x1')
+    return ids
+})
+
+// ── Build plan state ──
+const storedPlacements  = ref(null)  // Int32Array (6 values per brick)
+const storedNumStudsX   = ref(0)
+const storedNumStudsY   = ref(0)
+const buildPlanCanvasEl = ref(null)
+const buildPlanAreaEl   = ref(null)
+const selectedBP        = ref(-1)    // -1 = all, 0…n = baseplate index
+const shareStatus       = ref('idle') // 'idle' | 'copied' | 'error'
+const isViewOnly        = ref(false)   // true when loaded from a shared plan URL
+
+// Build plan hover tooltip
+const buildPlanLookup   = ref(null)   // Int32Array: studY*nX+studX → placementIdx (-1=none)
+const planTooltip       = ref({ show: false, x: 0, y: 0, colorName: '', colorRgba: '', brickLabel: '' })
+let   buildRenderState  = { studSz: 8, originSX: 0, originSY: 0 }
+
+watch(selectedBP,        () => nextTick(renderBuildPlan))
+watch(storedPlacements,  buildLookupMap)
 const isDraggingOverlay = ref(false)
 const legoCanvasEl = ref(null)
 const wallContainerEl = ref(null)
@@ -451,11 +661,52 @@ const locales = {
 }
 
 const totalPrice = computed(() => {
-    const tileDKK = 0.25 * (16 * useImageStore().width) * (16 * useImageStore().height)
+    let tileDKK
+    if (brickCountsData.value) {
+        const numC = useImageStore().allColorOptions.length
+        tileDKK = 0
+        BRICK_DEFS_MAIN.forEach((brick, btIdx) => {
+            let pieces = 0
+            for (let ci = 0; ci < numC; ci++) pieces += brickCountsData.value[btIdx * numC + ci]
+            tileDKK += pieces * brick.priceDKK
+        })
+    } else {
+        tileDKK = 0.25 * (16 * useImageStore().width) * (16 * useImageStore().height)
+    }
     const baseplateDKK = 30 * useImageStore().width * useImageStore().height
     const totalDKK = tileDKK + baseplateDKK
     const converted = totalDKK * locales[selectedLocale.value].rate
     return `≈${converted.toFixed(1)} ${locales[selectedLocale.value].currency}`
+})
+
+const totalPiecesCount = computed(() => {
+    if (!brickCountsData.value) return (16 * useImageStore().width) * (16 * useImageStore().height)
+    let total = 0
+    for (let i = 0; i < brickCountsData.value.length; i++) total += brickCountsData.value[i]
+    return total
+})
+
+const piecesData = computed(() => {
+    if (!brickCountsData.value) return []
+    const numC = useImageStore().allColorOptions.length
+    return BRICK_DEFS_MAIN
+        .map((brick, btIdx) => {
+            const colorRows = useImageStore().allColorOptions
+                .map((colorOpt, ci) => {
+                    const cnt = brickCountsData.value[btIdx * numC + ci]
+                    if (!cnt) return null
+                    return {
+                        color: colorOpt.color,
+                        colorName: colorOpt.colorName,
+                        count: cnt,
+                        cost: formatPrice(cnt * brick.priceDKK),
+                    }
+                })
+                .filter(Boolean)
+            if (!colorRows.length) return null
+            return { id: brick.id, label: brick.label, colorRows }
+        })
+        .filter(Boolean)
 })
 
 function formatPrice(dkk) {
@@ -487,9 +738,9 @@ let currentStudSize = 8
 let convertDebounceTimer = null
 const baseURL = useRuntimeConfig().app.baseURL
 
-    onMounted(() => {
+    onMounted(async () => {
 
-        readCSV()
+        await readCSV()
 
         fileInput = document.getElementById('fileInput');
         originalImage = document.getElementById('originalImage');
@@ -507,6 +758,7 @@ const baseURL = useRuntimeConfig().app.baseURL
         mosaicWorker = new Worker(baseURL + 'mosaic.worker.js');
         mosaicWorker.onmessage = handleWorkerMessage;
 
+        await importPlanFromURL();
     })
 
     onUnmounted(() => {
@@ -514,69 +766,500 @@ const baseURL = useRuntimeConfig().app.baseURL
         clearTimeout(convertDebounceTimer);
     });
 
-    function handleWorkerMessage(e) {
-        const { results: resultBuffer, counts: countBuffer, numStudsX, numStudsY, generation } = e.data;
+    function drawBrickOnCanvas(ctx, px, py, w, h, colorRgba, showStuds, studSize) {
+        if (showStuds) {
+            ctx.fillStyle = colorRgba
+            ctx.fillRect(px, py, w * studSize, h * studSize)
+            ctx.fillStyle = 'rgba(255,255,255,0.1)'
+            for (let dy = 0; dy < h; dy++) {
+                for (let dx = 0; dx < w; dx++) {
+                    ctx.beginPath()
+                    ctx.arc(px + (dx + 0.5) * studSize, py + (dy + 0.5) * studSize, studSize / 3, 0, Math.PI * 2)
+                    ctx.fill()
+                }
+            }
+        } else {
+            ctx.fillStyle = 'rgba(0,0,0,1)'
+            ctx.fillRect(px, py, w * studSize, h * studSize)
+            ctx.fillStyle = colorRgba
+            for (let dy = 0; dy < h; dy++) {
+                for (let dx = 0; dx < w; dx++) {
+                    ctx.beginPath()
+                    ctx.arc(px + (dx + 0.5) * studSize, py + (dy + 0.5) * studSize, studSize / 2, 0, Math.PI * 2)
+                    ctx.fill()
+                }
+            }
+        }
+    }
 
-        // Discard stale results from superseded jobs
+    function handleWorkerMessage(e) {
+        const { placements: plcBuffer, brickCounts: brickCountsBuf, numStudsX, numStudsY, generation } = e.data;
         if (generation !== processingGeneration) return;
 
-        const results = new Int32Array(resultBuffer);
-        const counts  = new Int32Array(countBuffer);
+        const plc = new Int32Array(plcBuffer);
+        const brickCountsArr = new Int32Array(brickCountsBuf);
         const studSize = currentStudSize;
+        const numPlacements = plc.length / 6;
+        const showStuds = useImageStore().showStuds;
 
         legoCanvas = document.getElementById('legoCanvas');
         legoCtx = legoCanvas.getContext('2d');
 
-        for (let sy = 0; sy < numStudsY; sy++) {
-            for (let sx = 0; sx < numStudsX; sx++) {
-                const studX = sx * studSize;
-                const studY = sy * studSize;
-                const colorIdx = results[sy * numStudsX + sx];
+        for (let i = 0; i < numPlacements; i++) {
+            const sx       = plc[i * 6];
+            const sy       = plc[i * 6 + 1];
+            const w        = plc[i * 6 + 2]; // 0 = L-piece
+            const h        = plc[i * 6 + 3];
+            const colorIdx = plc[i * 6 + 4];
 
-                let colorRgba;
-                if (colorIdx < 0) {
-                    colorRgba = 'rgba(0, 0, 0, 1)';
-                } else {
-                    const c = useImageStore().allColorOptions[colorIdx].color;
-                    colorRgba = `rgba(${c[0]}, ${c[1]}, ${c[2]}, 1)`;
+            const colorRgba = colorIdx < 0
+                ? 'rgba(0,0,0,1)'
+                : (() => { const c = useImageStore().allColorOptions[colorIdx].color; return `rgba(${c[0]},${c[1]},${c[2]},1)`; })();
+
+            if (w === 0) {
+                // L-piece: render as 3 individual stud cells
+                const ori = h - 1;
+                for (const [dx, dy] of L_CELLS_MAIN[ori]) {
+                    drawBrickOnCanvas(legoCtx, (sx + dx) * studSize, (sy + dy) * studSize, 1, 1, colorRgba, showStuds, studSize);
                 }
+            } else {
+                drawBrickOnCanvas(legoCtx, sx * studSize, sy * studSize, w, h, colorRgba, showStuds, studSize);
+            }
+        }
 
-                if (useImageStore().showStuds) {
-                    legoCtx.fillStyle = colorRgba;
-                    legoCtx.fillRect(studX, studY, studSize, studSize);
-                    legoCtx.fillStyle = 'rgba(255,255,255,0.1)';
-                    legoCtx.beginPath();
-                    legoCtx.arc(studX + studSize / 2, studY + studSize / 2, studSize / 3, 0, Math.PI * 2);
-                    legoCtx.fill();
-                } else {
-                    legoCtx.fillStyle = 'rgba(0,0,0,1)';
-                    legoCtx.fillRect(studX, studY, studSize, studSize);
-                    legoCtx.fillStyle = colorRgba;
-                    legoCtx.beginPath();
-                    legoCtx.arc(studX + studSize / 2, studY + studSize / 2, studSize / 2, 0, Math.PI * 2);
-                    legoCtx.fill();
+        // Baseplate grid lines drawn as a single post-pass (cleaner than per-stud)
+        if (useImageStore().showGrid && !useImageStore().previewArtOnWall) {
+            legoCtx.fillStyle = 'rgba(0,0,0,1)';
+            for (let gx = 16; gx < numStudsX; gx += 16) {
+                legoCtx.fillRect(gx * studSize, 0, 1, numStudsY * studSize);
+            }
+            for (let gy = 16; gy < numStudsY; gy += 16) {
+                legoCtx.fillRect(0, gy * studSize, numStudsX * studSize, 1);
+            }
+        }
+
+        // Store brick counts for Pieces panel and pricing
+        brickCountsData.value = brickCountsArr;
+
+        // Update allColorOptions.count (total pieces per color, for used/visible flag)
+        const numC = useImageStore().allColorOptions.length;
+        useImageStore().allColorOptions.forEach((_, ci) => {
+            let total = 0;
+            for (let bi = 0; bi < BRICK_DEFS_MAIN.length; bi++) total += brickCountsArr[bi * numC + ci];
+            useImageStore().allColorOptions[ci].count = total;
+            useImageStore().allColorOptions[ci].used  = total > 0;
+        });
+
+        // Save placements for build plan
+        storedPlacements.value = plc;
+        storedNumStudsX.value  = numStudsX;
+        storedNumStudsY.value  = numStudsY;
+        if (useMenuStore().menuItemShow === 'B') nextTick(renderBuildPlan);
+
+        isProcessing.value = false;
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    //  Build plan rendering
+    // ─────────────────────────────────────────────────────────────────
+
+    function buildLookupMap() {
+        const plc = storedPlacements.value
+        if (!plc) { buildPlanLookup.value = null; return }
+        const nX = storedNumStudsX.value; const nY = storedNumStudsY.value
+        const lookup = new Int32Array(nX * nY).fill(-1)
+        const numP = plc.length / 6
+        for (let i = 0; i < numP; i++) {
+            const sx = plc[i*6]; const sy = plc[i*6+1]
+            const w  = plc[i*6+2]; const h  = plc[i*6+3]
+            const ci = plc[i*6+4]
+            if (ci < 0) continue
+            if (w === 0) { // L-piece
+                for (const [dx, dy] of L_CELLS_MAIN[h-1]) {
+                    const nx = sx+dx, ny = sy+dy
+                    if (nx < nX && ny < nY) lookup[ny*nX + nx] = i
                 }
+            } else {
+                for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) {
+                    const nx = sx+dx, ny = sy+dy
+                    if (nx < nX && ny < nY) lookup[ny*nX + nx] = i
+                }
+            }
+        }
+        buildPlanLookup.value = lookup
+    }
 
-                if (useImageStore().showGrid && !useImageStore().previewArtOnWall) {
-                    if (sx % 16 === 0 && sx !== 0) {
-                        legoCtx.fillStyle = 'rgba(0,0,0,1)';
-                        legoCtx.fillRect(studX, studY, 1, studSize);
-                    }
-                    if (sy % 16 === 0 && sy !== 0) {
-                        legoCtx.fillStyle = 'rgba(0,0,0,1)';
-                        legoCtx.fillRect(studX, studY, studSize, 1);
-                    }
+    function onBuildCanvasMouseMove(e) {
+        if (!buildPlanLookup.value || !storedPlacements.value) return
+        const canvas = buildPlanCanvasEl.value
+        if (!canvas) return
+        const rect    = canvas.getBoundingClientRect()
+        const mouseX  = e.clientX - rect.left
+        const mouseY  = e.clientY - rect.top
+        const { studSz, originSX, originSY } = buildRenderState
+        if (studSz <= 0) return
+        const studX = Math.floor(mouseX / studSz) + originSX
+        const studY = Math.floor(mouseY / studSz) + originSY
+        const nX = storedNumStudsX.value; const nY = storedNumStudsY.value
+        if (studX < 0 || studY < 0 || studX >= nX || studY >= nY) {
+            planTooltip.value = { ...planTooltip.value, show: false }; return
+        }
+        const pIdx = buildPlanLookup.value[studY * nX + studX]
+        if (pIdx < 0) { planTooltip.value = { ...planTooltip.value, show: false }; return }
+        const plc  = storedPlacements.value
+        const ci   = plc[pIdx*6 + 4]
+        const bi   = plc[pIdx*6 + 5]
+        const w    = plc[pIdx*6 + 2]
+        if (ci < 0) { planTooltip.value = { ...planTooltip.value, show: false }; return }
+        const colorOpt  = useImageStore().allColorOptions[ci]
+        const brickDef  = BRICK_DEFS_MAIN[bi]
+        const c = colorOpt?.color
+        planTooltip.value = {
+            show:       true,
+            x:          e.clientX + 16,
+            y:          e.clientY - 10,
+            colorName:  colorOpt?.colorName  || 'Unknown',
+            colorRgba:  c ? `rgba(${c[0]},${c[1]},${c[2]},1)` : '#444',
+            brickLabel: brickDef ? (w === 0 ? brickDef.label + ' corner plate' : brickDef.label + ' plate') : 'plate',
+        }
+    }
+
+    function onBuildCanvasMouseLeave() {
+        planTooltip.value = { ...planTooltip.value, show: false }
+    }
+
+    function selectBP(idx) {
+        selectedBP.value = idx
+    }
+
+    function openPlanTab() {
+        useMenuStore().menuItemShow = 'B'
+        nextTick(renderBuildPlan)
+    }
+
+    function renderBuildPlan() {
+        const canvas = buildPlanCanvasEl.value
+        if (!canvas || !storedPlacements.value) return
+
+        const plc  = storedPlacements.value
+        const numP = plc.length / 6
+        const nX   = storedNumStudsX.value
+        const nY   = storedNumStudsY.value
+        if (!nX || !nY) return
+
+        const W = useImageStore().width
+        const H = useImageStore().height
+        const area = buildPlanAreaEl.value
+        const areaW = area ? area.clientWidth  : 700
+        const areaH = area ? area.clientHeight : 600
+
+        // ── Compute integer studSz so every stud cell is a perfect square ──
+        let studSz, cssW, cssH
+        let originSX = 0, originSY = 0
+
+        if (selectedBP.value >= 0) {
+            const bpCol = selectedBP.value % W
+            const bpRow = Math.floor(selectedBP.value / W)
+            originSX = bpCol * 16; originSY = bpRow * 16
+            // Square canvas: fit in the smallest dimension minus nav bar (≈52px)
+            studSz = Math.max(8, Math.floor(Math.min(areaW - 16, areaH - 52) / 16))
+            cssW = cssH = 16 * studSz       // guaranteed square
+        } else {
+            const maxW = areaW - 16
+            const maxH = areaH - 52
+            // Same studSz for X and Y → stud cells are always square
+            studSz = Math.max(3, Math.floor(Math.min(maxW / nX, maxH / nY)))
+            cssW = nX * studSz
+            cssH = nY * studSz
+        }
+
+        // ── HiDPI: scale canvas pixel buffer by DPR for crisp circles ──
+        const dpr = Math.ceil(window.devicePixelRatio || 1)
+        canvas.width  = cssW * dpr
+        canvas.height = cssH * dpr
+        // Set explicit CSS size = logical size → no browser stretching
+        canvas.style.width  = cssW + 'px'
+        canvas.style.height = cssH + 'px'
+
+        // Save state for mouse hover lookup
+        buildRenderState = { studSz, originSX, originSY }
+
+        const ctx = canvas.getContext('2d')
+        ctx.scale(dpr, dpr)      // all draw calls now in CSS-pixel space
+
+        ctx.fillStyle = '#18181b'
+        ctx.fillRect(0, 0, cssW, cssH)
+
+        const outlineW  = Math.max(1, Math.min(2, studSz / 10))
+        const drawKnobs = studSz >= 8
+        const knobR     = studSz * 0.28   // radius for stud knob circle
+
+        // ── Pass 1: Fill all bricks ──────────────────────────────────────
+        for (let i = 0; i < numP; i++) {
+            const sx = plc[i*6]; const sy = plc[i*6+1]
+            const w  = plc[i*6+2]; const h  = plc[i*6+3]
+            const ci = plc[i*6+4]
+            if (ci < 0) continue
+            if (selectedBP.value >= 0 &&
+                (Math.floor(sx/16) !== selectedBP.value % W ||
+                 Math.floor(sy/16) !== Math.floor(selectedBP.value / W))) continue
+
+            const cArr = useImageStore().allColorOptions[ci]?.color
+            ctx.fillStyle = cArr ? `rgba(${cArr[0]},${cArr[1]},${cArr[2]},1)` : '#333'
+
+            if (w === 0) {          // L-piece
+                for (const [dx, dy] of L_CELLS_MAIN[h - 1]) {
+                    ctx.fillRect((sx+dx-originSX)*studSz, (sy+dy-originSY)*studSz, studSz, studSz)
+                }
+            } else {
+                ctx.fillRect((sx-originSX)*studSz, (sy-originSY)*studSz, w*studSz, h*studSz)
+            }
+        }
+
+        // ── Pass 2: Outlines (drawn after all fills so they're never buried) ──
+        ctx.strokeStyle = 'rgba(0,0,0,0.78)'
+        ctx.lineWidth   = outlineW
+        for (let i = 0; i < numP; i++) {
+            const sx = plc[i*6]; const sy = plc[i*6+1]
+            const w  = plc[i*6+2]; const h  = plc[i*6+3]
+            const ci = plc[i*6+4]
+            if (ci < 0) continue
+            if (selectedBP.value >= 0 &&
+                (Math.floor(sx/16) !== selectedBP.value % W ||
+                 Math.floor(sy/16) !== Math.floor(selectedBP.value / W))) continue
+
+            const hw = outlineW / 2
+            const px = (sx - originSX) * studSz
+            const py = (sy - originSY) * studSz
+            const s  = studSz
+
+            if (w === 0) {
+                // L-piece: single polygon outline — no internal borders between cells
+                const ori = h - 1
+                ctx.beginPath()
+                switch (ori) {
+                    case 0: // missing top-right
+                        ctx.moveTo(px+hw,     py+hw)
+                        ctx.lineTo(px+s-hw,   py+hw)
+                        ctx.lineTo(px+s-hw,   py+s+hw)
+                        ctx.lineTo(px+2*s-hw, py+s+hw)
+                        ctx.lineTo(px+2*s-hw, py+2*s-hw)
+                        ctx.lineTo(px+hw,     py+2*s-hw)
+                        break
+                    case 1: // missing bottom-right
+                        ctx.moveTo(px+hw,     py+hw)
+                        ctx.lineTo(px+2*s-hw, py+hw)
+                        ctx.lineTo(px+2*s-hw, py+s-hw)
+                        ctx.lineTo(px+s+hw,   py+s-hw)
+                        ctx.lineTo(px+s+hw,   py+2*s-hw)
+                        ctx.lineTo(px+hw,     py+2*s-hw)
+                        break
+                    case 2: // missing bottom-left
+                        ctx.moveTo(px+hw,     py+hw)
+                        ctx.lineTo(px+2*s-hw, py+hw)
+                        ctx.lineTo(px+2*s-hw, py+2*s-hw)
+                        ctx.lineTo(px+s+hw,   py+2*s-hw)
+                        ctx.lineTo(px+s+hw,   py+s-hw)
+                        ctx.lineTo(px+hw,     py+s-hw)
+                        break
+                    case 3: // missing top-left
+                        ctx.moveTo(px+s-hw,   py+hw)
+                        ctx.lineTo(px+2*s-hw, py+hw)
+                        ctx.lineTo(px+2*s-hw, py+2*s-hw)
+                        ctx.lineTo(px+hw,     py+2*s-hw)
+                        ctx.lineTo(px+hw,     py+s+hw)
+                        ctx.lineTo(px+s-hw,   py+s+hw)
+                        break
+                }
+                ctx.closePath()
+                ctx.stroke()
+            } else {
+                ctx.strokeRect(px + hw, py + hw, w*studSz - outlineW, h*studSz - outlineW)
+            }
+        }
+
+        // ── Pass 3: Stud knobs ───────────────────────────────────────────
+        if (drawKnobs) {
+            ctx.fillStyle = 'rgba(255,255,255,0.18)'
+            for (let i = 0; i < numP; i++) {
+                const sx = plc[i*6]; const sy = plc[i*6+1]
+                const w  = plc[i*6+2]; const h  = plc[i*6+3]
+                const ci = plc[i*6+4]
+                if (ci < 0) continue
+                if (selectedBP.value >= 0 &&
+                    (Math.floor(sx/16) !== selectedBP.value % W ||
+                     Math.floor(sy/16) !== Math.floor(selectedBP.value / W))) continue
+
+                const cells = w === 0
+                    ? L_CELLS_MAIN[h-1].map(([dx,dy]) => [sx+dx, sy+dy])
+                    : Array.from({length: h}, (_,dy) =>
+                        Array.from({length: w}, (_,dx) => [sx+dx, sy+dy])).flat()
+
+                for (const [cx, cy] of cells) {
+                    ctx.beginPath()
+                    ctx.arc(
+                        (cx - originSX + 0.5) * studSz,
+                        (cy - originSY + 0.5) * studSz,
+                        knobR, 0, Math.PI * 2
+                    )
+                    ctx.fill()
                 }
             }
         }
 
-        // Update color counts and used flags
-        useImageStore().allColorOptions.forEach((item, i) => {
-            useImageStore().allColorOptions[i].count = counts[i];
-            useImageStore().allColorOptions[i].used = counts[i] > 0;
-        });
+        // ── Baseplate grid & labels ──────────────────────────────────────
+        if (selectedBP.value < 0) {
+            // White dividing lines between baseplates
+            ctx.fillStyle = 'rgba(255,255,255,0.75)'
+            for (let gx = 16; gx < nX; gx += 16) ctx.fillRect(gx*studSz - 1, 0, 2, cssH)
+            for (let gy = 16; gy < nY; gy += 16) ctx.fillRect(0, gy*studSz - 1, cssW, 2)
+            // Plate ID labels
+            if (studSz >= 5) {
+                const fs = Math.min(11, studSz * 1.6)
+                ctx.font = `bold ${fs}px sans-serif`
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+                for (let row = 0; row < H; row++) for (let col = 0; col < W; col++) {
+                    const label = `${String.fromCharCode(65+row)}${col+1}`
+                    const lx = (col*16 + 8)*studSz; const ly = (row*16 + 8)*studSz
+                    ctx.fillStyle = 'rgba(0,0,0,0.6)';   ctx.fillText(label, lx+1, ly+1)
+                    ctx.fillStyle = 'rgba(255,255,255,0.8)'; ctx.fillText(label, lx, ly)
+                }
+            }
+        } else {
+            // Sub-stud grid lines for single-plate view
+            if (studSz >= 12) {
+                ctx.strokeStyle = 'rgba(255,255,255,0.07)'; ctx.lineWidth = 0.5
+                for (let g = 1; g < 16; g++) {
+                    ctx.beginPath(); ctx.moveTo(g*studSz, 0); ctx.lineTo(g*studSz, cssH); ctx.stroke()
+                    ctx.beginPath(); ctx.moveTo(0, g*studSz); ctx.lineTo(cssW, g*studSz); ctx.stroke()
+                }
+            }
+            // Stud coordinate numbers
+            if (studSz >= 14) {
+                ctx.font = `${Math.min(9, studSz * 0.52)}px monospace`
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+                ctx.fillStyle = 'rgba(255,255,255,0.3)'
+                for (let g = 0; g < 16; g++) {
+                    ctx.fillText(g+1, (g+0.5)*studSz, studSz * 0.3)
+                    ctx.fillText(g+1, studSz * 0.3, (g+0.5)*studSz)
+                }
+            }
+            // Plate name label
+            const bpName = `${String.fromCharCode(65+Math.floor(selectedBP.value/W))}${selectedBP.value%W+1}`
+            ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'left'; ctx.textBaseline = 'top'
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';   ctx.fillText(`Plate ${bpName}`, 5, 5)
+            ctx.fillStyle = 'rgba(255,255,255,0.65)'; ctx.fillText(`Plate ${bpName}`, 4, 4)
+        }
 
-        isProcessing.value = false;
+        // Rebuild lookup map so hover works on the freshly rendered frame
+        buildLookupMap()
+    }
+
+    function renderMosaicFromPlacements(placements, numStudsX, numStudsY) {
+        const legoC = document.getElementById('legoCanvas')
+        if (!legoC) return
+        const ctx = legoC.getContext('2d')
+        const ss = 8
+        legoC.width  = numStudsX * ss
+        legoC.height = numStudsY * ss
+        const numP = placements.length / 6
+        const showStuds = useImageStore().showStuds
+
+        for (let i = 0; i < numP; i++) {
+            const sx = placements[i*6]; const sy = placements[i*6+1]
+            const w  = placements[i*6+2]; const h  = placements[i*6+3]
+            const ci = placements[i*6+4]; const isL = w === 0; const ori = h - 1
+            const cArr = ci >= 0 ? useImageStore().allColorOptions[ci]?.color : null
+            const color = cArr ? `rgba(${cArr[0]},${cArr[1]},${cArr[2]},1)` : 'rgba(0,0,0,1)'
+            if (isL) {
+                for (const [dx, dy] of L_CELLS_MAIN[ori])
+                    drawBrickOnCanvas(ctx, (sx+dx)*ss, (sy+dy)*ss, 1, 1, color, showStuds, ss)
+            } else {
+                drawBrickOnCanvas(ctx, sx*ss, sy*ss, w, h, color, showStuds, ss)
+            }
+        }
+        if (useImageStore().showGrid) {
+            ctx.fillStyle = 'rgba(0,0,0,1)'
+            for (let gx = 16; gx < numStudsX; gx += 16) ctx.fillRect(gx*ss, 0, 1, numStudsY*ss)
+            for (let gy = 16; gy < numStudsY; gy += 16) ctx.fillRect(0, gy*ss, numStudsX*ss, 1)
+        }
+    }
+
+    async function exportPlanURL() {
+        if (!storedPlacements.value) return
+        shareStatus.value = 'copying'
+        try {
+            const plc = storedPlacements.value; const numP = plc.length / 6
+            const raw = new Uint8Array(3 + numP * 6)
+            raw[0] = 1; raw[1] = useImageStore().width & 0xFF; raw[2] = useImageStore().height & 0xFF
+            for (let i = 0; i < numP; i++) {
+                raw[3+i*6]   = plc[i*6]     & 0xFF
+                raw[3+i*6+1] = plc[i*6+1]   & 0xFF
+                raw[3+i*6+2] = plc[i*6+2]   & 0xFF
+                raw[3+i*6+3] = plc[i*6+3]   & 0xFF
+                raw[3+i*6+4] = (plc[i*6+4]+1) & 0xFF  // colorIdx+1 (0=none)
+                raw[3+i*6+5] = plc[i*6+5]   & 0xFF
+            }
+            let data = raw; let prefix = 'r'
+            if (typeof CompressionStream !== 'undefined') { data = await deflate(raw); prefix = 'z' }
+            const encoded = prefix + arrayToBase64url(data)
+            const url = new URL(window.location.href)
+            url.searchParams.set('plan', encoded)
+            await navigator.clipboard.writeText(url.toString())
+            shareStatus.value = 'copied'
+            setTimeout(() => { shareStatus.value = 'idle' }, 3000)
+        } catch (err) {
+            console.error('Export plan failed:', err)
+            shareStatus.value = 'error'
+            setTimeout(() => { shareStatus.value = 'idle' }, 3000)
+        }
+    }
+
+    async function importPlanFromURL() {
+        const planStr = new URLSearchParams(window.location.search).get('plan')
+        if (!planStr || planStr.length < 4) return
+        try {
+            const prefix = planStr[0]
+            let raw = base64urlToArray(planStr.slice(1))
+            if (prefix === 'z') raw = await inflate(raw)
+            if (raw[0] !== 1) return
+            const W = raw[1]; const H = raw[2]
+            useImageStore().width = W; useImageStore().height = H
+            const numP = Math.floor((raw.length - 3) / 6)
+            const placements = new Int32Array(numP * 6)
+            for (let i = 0; i < numP; i++) {
+                placements[i*6]   = raw[3+i*6]
+                placements[i*6+1] = raw[3+i*6+1]
+                placements[i*6+2] = raw[3+i*6+2]
+                placements[i*6+3] = raw[3+i*6+3]
+                placements[i*6+4] = raw[3+i*6+4] - 1  // restore colorIdx
+                placements[i*6+5] = raw[3+i*6+5]
+            }
+            const numC = useImageStore().allColorOptions.length
+            const bca  = new Int32Array(BRICK_DEFS_MAIN.length * numC)
+            for (let i = 0; i < numP; i++) {
+                const ci = placements[i*6+4]; const bi = placements[i*6+5]
+                if (ci >= 0 && ci < numC && bi >= 0 && bi < BRICK_DEFS_MAIN.length) bca[bi*numC+ci]++
+            }
+            brickCountsData.value = bca
+            useImageStore().allColorOptions.forEach((_, ci) => {
+                let total = 0
+                for (let bi = 0; bi < BRICK_DEFS_MAIN.length; bi++) total += bca[bi*numC+ci]
+                useImageStore().allColorOptions[ci].count = total
+                useImageStore().allColorOptions[ci].used  = total > 0
+            })
+            storedPlacements.value = placements
+            storedNumStudsX.value  = W * 16
+            storedNumStudsY.value  = H * 16
+            isViewOnly.value = true
+            await nextTick()
+            renderMosaicFromPlacements(placements, W * 16, H * 16)
+            useMenuStore().menuItemShow = 'B'
+            await nextTick()
+            renderBuildPlan()
+        } catch (err) {
+            console.error('Import plan from URL failed:', err)
+        }
     }
 
     function fileInputChange() {
@@ -731,8 +1414,9 @@ const baseURL = useRuntimeConfig().app.baseURL
                 canvasWidth: canvas.width,
                 canvasHeight: canvas.height,
                 studSize,
-                colorOptions: useImageStore().allColorOptions.map(o => ({ color: Array.from(o.color), checked: !!o.checked })),
-                generation: processingGeneration
+                colorOptions: useImageStore().allColorOptions.map(o => ({ color: Array.from(o.color), checked: !!o.checked, name: o.colorName })),
+                generation: processingGeneration,
+                enabledBrickIds: enabledBrickIds.value,
             }, [imageData.data.buffer]);
         } else {
             legoCtx.drawImage(canvas, 0, 0);
@@ -961,24 +1645,61 @@ const baseURL = useRuntimeConfig().app.baseURL
         return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
     }
 
+    function toggleMosaic() {
+        if (isViewOnly.value) return
+        useImageStore().previewShowMosaic = !useImageStore().previewShowMosaic
+        initConvert()
+    }
+    function toggleGrid() {
+        if (isViewOnly.value) return
+        useImageStore().showGrid = !useImageStore().showGrid
+        initConvert()
+    }
+
+    function toggleBrickSize(b) {
+        if (b.id === '1x1') return
+        b.enabled = !b.enabled
+        initConvert()
+    }
+
     function buildBricklinkXML() {
         // BrickLink XML format must NOT have an XML declaration — see bricklink.com/help.asp?helpID=207
         let xml = '<INVENTORY>\n'
 
-        // 1×1 plates (item 3024) grouped by BrickLink color
-        useImageStore().allColorOptions.forEach(item => {
-            if (item.count <= 0) return
-            const blColor = BRICKLINK_COLORS[item.colorName]
-            if (blColor === undefined) return
-            xml += '  <ITEM>\n'
-            xml += '    <ITEMTYPE>P</ITEMTYPE>\n'
-            xml += '    <ITEMID>3024</ITEMID>\n'
-            xml += `    <COLOR>${blColor}</COLOR>\n`
-            xml += `    <MINQTY>${item.count}</MINQTY>\n`
-            xml += '    <CONDITION>N</CONDITION>\n'
-            xml += `    <REMARKS>${escapeXML(item.colorName)}</REMARKS>\n`
-            xml += '  </ITEM>\n'
-        })
+        if (brickCountsData.value) {
+            const numC = useImageStore().allColorOptions.length
+            BRICK_DEFS_MAIN.forEach((brick, btIdx) => {
+                useImageStore().allColorOptions.forEach((colorOpt, ci) => {
+                    const cnt = brickCountsData.value[btIdx * numC + ci]
+                    if (!cnt) return
+                    const blColor = BRICKLINK_COLORS[colorOpt.colorName]
+                    if (blColor === undefined) return
+                    xml += '  <ITEM>\n'
+                    xml += '    <ITEMTYPE>P</ITEMTYPE>\n'
+                    xml += `    <ITEMID>${brick.blId}</ITEMID>\n`
+                    xml += `    <COLOR>${blColor}</COLOR>\n`
+                    xml += `    <MINQTY>${cnt}</MINQTY>\n`
+                    xml += `    <CONDITION>${bricklinkAllowUsed.value ? 'X' : 'N'}</CONDITION>\n`
+                    xml += `    <REMARKS>${escapeXML(colorOpt.colorName)} ${brick.label}</REMARKS>\n`
+                    xml += '  </ITEM>\n'
+                })
+            })
+        } else {
+            // Fallback: 1×1 plates only (no brick data yet)
+            useImageStore().allColorOptions.forEach(item => {
+                if (item.count <= 0) return
+                const blColor = BRICKLINK_COLORS[item.colorName]
+                if (blColor === undefined) return
+                xml += '  <ITEM>\n'
+                xml += '    <ITEMTYPE>P</ITEMTYPE>\n'
+                xml += '    <ITEMID>3024</ITEMID>\n'
+                xml += `    <COLOR>${blColor}</COLOR>\n`
+                xml += `    <MINQTY>${item.count}</MINQTY>\n`
+                xml += `    <CONDITION>${bricklinkAllowUsed.value ? 'X' : 'N'}</CONDITION>\n`
+                xml += `    <REMARKS>${escapeXML(item.colorName)}</REMARKS>\n`
+                xml += '  </ITEM>\n'
+            })
+        }
 
         // 16×16 baseplates (item 65803) — any color for cheapest price
         const baseplateCount = useImageStore().width * useImageStore().height
@@ -987,7 +1708,7 @@ const baseURL = useRuntimeConfig().app.baseURL
             xml += '    <ITEMTYPE>P</ITEMTYPE>\n'
             xml += '    <ITEMID>65803</ITEMID>\n'
             xml += `    <MINQTY>${baseplateCount}</MINQTY>\n`
-            xml += '    <CONDITION>N</CONDITION>\n'
+            xml += `    <CONDITION>${bricklinkAllowUsed.value ? 'X' : 'N'}</CONDITION>\n`
             xml += '    <REMARKS>16x16 Baseplate (any color)</REMARKS>\n'
             xml += '  </ITEM>\n'
         }
@@ -997,6 +1718,7 @@ const baseURL = useRuntimeConfig().app.baseURL
     }
 
     const bricklinkCopied = ref(false)
+    const bricklinkAllowUsed = ref(false)
     let bricklinkCopyTimer = null
 
     async function copyBricklinkXML() {
