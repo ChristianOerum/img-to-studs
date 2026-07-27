@@ -1,5 +1,7 @@
 # img-to-studs
 
+![App screenshot](assets/images/app.png)
+
 Convert any image into a LEGO mosaic. Upload a photo and get an instant preview, a full piece list, and a BrickLink want list — ready to order.
 
 **Live app:** https://christianoerum.github.io/img-to-studs/
