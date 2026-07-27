@@ -603,7 +603,7 @@ const brickSizeOptions = ref([
     { id: '4x4',  label: '4×4',        enabled: true  },
     { id: '2x3',  label: '2×3',        enabled: true  },
     { id: '2x2',  label: '2×2',        enabled: true  },
-    { id: '2x2L', label: '2×2 Corner', enabled: true  },
+    { id: '2x2L', label: '2×2 Corner', enabled: false },
     { id: '1x2',  label: '1×2',        enabled: true  },
     { id: '1x1',  label: '1×1',        enabled: true  }, // always on
 ])
