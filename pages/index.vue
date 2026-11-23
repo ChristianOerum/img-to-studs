@@ -52,7 +52,8 @@
                     >Grid</button>
 
                     <button
-                        @click="useImageStore().previewArtOnWall = !useImageStore().previewArtOnWall; initConvert()"
+                        @click="useImageStore().previewArtOnWall = !useImageStore().previewArtOnWall"
+                        title="Show the artwork hanging in a 3D living room"
                         class="px-2.5 py-1 rounded-full text-xs font-semibold transition-colors"
                         :class="useImageStore().previewArtOnWall ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'"
                     >Wall</button>
@@ -137,16 +138,41 @@
             <div class="flex-1 overflow-y-auto no-scrollbar px-4 py-3">
 
                 <!-- Source Image upload -->
-                <div v-if="useMenuStore().menuItemShow === 'SI'" class="flex items-center justify-center w-full h-full min-h-32">
-                    <label for="fileInput" class="flex flex-col items-center justify-center w-full h-full border border-dashed border-zinc-700 rounded-xl cursor-pointer hover:border-amber-500 hover:bg-amber-500/5 transition-all gap-2 p-6">
-                        <svg class="w-7 h-7 text-zinc-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                <div v-if="useMenuStore().menuItemShow === 'SI'" class="flex flex-col gap-3 w-full h-full min-h-32">
+                    <label class="flex items-center gap-2.5 cursor-pointer w-fit shrink-0">
+                        <div class="relative inline-flex items-center">
+                            <input @change="initConvert()" type="checkbox" v-model="useImageStore().dualImage" class="sr-only peer">
+                            <div class="w-9 h-5 bg-zinc-700 rounded-full peer peer-checked:bg-amber-500 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></div>
+                        </div>
+                        <span class="text-sm text-zinc-300">Dual image (cheese slopes)</span>
+                    </label>
+                    <p v-if="useImageStore().dualImage" class="text-[10px] text-zinc-500 leading-relaxed shrink-0">
+                        Built entirely from 1×1 cheese slopes. Columns alternate between the two images, with the slopes facing opposite ways,
+                        so you see image A from the left and image B from the right. Each image gets half the horizontal resolution.
+                    </p>
+
+                    <label for="fileInput" class="flex flex-col items-center justify-center w-full flex-1 min-h-28 border border-dashed border-zinc-700 rounded-xl cursor-pointer hover:border-amber-500 hover:bg-amber-500/5 transition-all gap-2 p-4">
+                        <img v-if="useImageStore().dualImage && originalImageSrc" :src="originalImageSrc" alt="" class="h-16 w-16 rounded-md object-cover">
+                        <svg v-else class="w-7 h-7 text-zinc-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
                         </svg>
                         <div class="text-center">
-                            <p class="text-sm text-zinc-400"><span class="font-semibold text-white">Click to upload</span></p>
+                            <p class="text-sm text-zinc-400"><span class="font-semibold text-white">{{ useImageStore().dualImage ? 'Image A' : 'Click to upload' }}</span><span v-if="useImageStore().dualImage"> · seen from the left</span></p>
                             <p class="text-xs text-zinc-600 mt-0.5">PNG, JPG or WEBP</p>
                         </div>
                         <input @change="fileInputChange()" id="fileInput" type="file" class="hidden" accept="image/*" />
+                    </label>
+
+                    <label v-if="useImageStore().dualImage" for="fileInputB" class="flex flex-col items-center justify-center w-full flex-1 min-h-28 border border-dashed border-zinc-700 rounded-xl cursor-pointer hover:border-amber-500 hover:bg-amber-500/5 transition-all gap-2 p-4">
+                        <img v-if="imageBSrc" :src="imageBSrc" alt="" class="h-16 w-16 rounded-md object-cover">
+                        <svg v-else class="w-7 h-7 text-zinc-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                        </svg>
+                        <div class="text-center">
+                            <p class="text-sm text-zinc-400"><span class="font-semibold text-white">Image B</span> · seen from the right</p>
+                            <p class="text-xs text-zinc-600 mt-0.5">{{ imageBSrc ? 'Click to replace' : 'Upload a second image' }}</p>
+                        </div>
+                        <input @change="fileInputBChange($event)" id="fileInputB" type="file" class="hidden" accept="image/*" />
                     </label>
                 </div>
 
@@ -182,6 +208,7 @@
                             >{{ b.label }}</button>
                         </div>
                         <p class="text-[10px] text-zinc-500 leading-relaxed">Larger bricks reduce cost. All bricks are confined to their 16×16 baseplate.</p>
+                        <p v-if="useImageStore().dualImage" class="text-[10px] text-amber-400/80 leading-relaxed">Dual image mode uses only 1×1 cheese slopes — brick sizes are ignored.</p>
                     </div>
                 </div>
 
@@ -223,6 +250,64 @@
                         </div>
                         <span class="text-sm text-zinc-300">Show original</span>
                     </label>
+
+                    <!-- Dithering -->
+                    <div class="border-t border-zinc-800 pt-3 flex flex-col gap-2">
+                        <label class="flex items-center gap-2.5 cursor-pointer w-fit">
+                            <div class="relative inline-flex items-center">
+                                <input @change="initConvert()" type="checkbox" v-model="useImageStore().dither" class="sr-only peer">
+                                <div class="w-9 h-5 bg-zinc-700 rounded-full peer peer-checked:bg-amber-500 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></div>
+                            </div>
+                            <span class="text-sm text-zinc-300">Color dithering</span>
+                        </label>
+                        <div v-if="useImageStore().dither" class="flex flex-col gap-1">
+                            <div class="flex justify-between text-xs text-zinc-400">
+                                <span>Strength</span><span class="text-white font-semibold">{{ useImageStore().ditherStrength }}%</span>
+                            </div>
+                            <input @input="initConvert()" type="range" min="0" max="100" step="5" v-model.number="useImageStore().ditherStrength" class="w-full accent-amber-500">
+                        </div>
+                        <p class="text-[10px] text-zinc-500 leading-relaxed">Mixes nearby colors so the mosaic matches the original better from a distance. Uses more small pieces.</p>
+                    </div>
+
+                    <!-- Height map -->
+                    <p v-if="useImageStore().dualImage" class="border-t border-zinc-800 pt-3 text-[10px] text-amber-400/80 leading-relaxed">
+                        Height map is not available in dual image mode — the cheese slopes must sit flat on the baseplate for the two-image effect.
+                    </p>
+                    <div v-else class="border-t border-zinc-800 pt-3 flex flex-col gap-2">
+                        <label class="flex items-center gap-2.5 cursor-pointer w-fit">
+                            <div class="relative inline-flex items-center">
+                                <input @change="initConvert()" type="checkbox" v-model="useImageStore().heightMap" class="sr-only peer">
+                                <div class="w-9 h-5 bg-zinc-700 rounded-full peer peer-checked:bg-amber-500 after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></div>
+                            </div>
+                            <span class="text-sm text-zinc-300">Height map (3D relief)</span>
+                        </label>
+                        <template v-if="useImageStore().heightMap">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex justify-between text-xs text-zinc-400">
+                                    <span>Max height</span>
+                                    <span class="text-white font-semibold">{{ useImageStore().heightMax }} plates <span class="text-zinc-500 font-normal">({{ (useImageStore().heightMax * 3.2).toFixed(1) }} mm)</span></span>
+                                </div>
+                                <input @input="initConvert()" type="range" min="1" max="15" step="1" v-model.number="useImageStore().heightMax" class="w-full accent-amber-500">
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button
+                                    v-for="m in [{ id: 'brightness', label: 'Brightness' }, { id: 'subject', label: 'Subject' }]" :key="m.id"
+                                    @click="useImageStore().heightMode = m.id; initConvert()"
+                                    class="px-2.5 py-1 rounded-full text-xs font-semibold transition-colors"
+                                    :class="useImageStore().heightMode === m.id ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'"
+                                >{{ m.label }}</button>
+                                <button
+                                    @click="useImageStore().heightInvert = !useImageStore().heightInvert; initConvert()"
+                                    class="ml-auto px-2.5 py-1 rounded-full text-xs font-semibold transition-colors"
+                                    :class="useImageStore().heightInvert ? 'bg-amber-400 text-zinc-950' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'"
+                                >Invert</button>
+                            </div>
+                        </template>
+                        <p class="text-[10px] text-zinc-500 leading-relaxed">
+                            Heights are generated automatically — <span class="text-zinc-400">Brightness</span> raises light areas, <span class="text-zinc-400">Subject</span> raises whatever differs from the background.
+                            Raised studs are supported underneath by the cheapest black bricks (3 plates tall) and plates.
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Colors -->
@@ -261,7 +346,7 @@
                 <div v-if="useMenuStore().menuItemShow === 'P'">
                     <template v-if="piecesData.length">
                         <template v-for="group in piecesData" :key="group.id">
-                            <p class="text-[10px] text-zinc-500 tracking-widest mb-2 mt-3 first:mt-0">{{ group.label.toUpperCase() }} PLATES</p>
+                            <p class="text-[10px] text-zinc-500 tracking-widest mb-2 mt-3 first:mt-0">{{ group.heading }}</p>
                             <div class="flex flex-col gap-1.5 mb-1">
                                 <div v-for="row in group.colorRows" :key="row.colorName" class="flex items-center gap-2">
                                     <div class="h-3.5 w-3.5 rounded shrink-0 ring-1 ring-white/10" :style="{ backgroundColor: `rgba(${row.color.join(',')})` }"></div>
@@ -280,6 +365,19 @@
                         <span class="text-sm text-zinc-400 truncate flex-1">16×16 Baseplate</span>
                         <span class="text-xs text-zinc-500 shrink-0">{{ formatPrice(useImageStore().width * useImageStore().height * 30) }}</span>
                     </div>
+
+                    <!-- Height map support pieces (black, hidden under the raised studs) -->
+                    <template v-for="group in supportPiecesData" :key="group.id">
+                        <p class="text-[10px] text-zinc-500 tracking-widest mb-2 mt-3">{{ group.label }}</p>
+                        <div class="flex flex-col gap-1.5 mb-1">
+                            <div v-for="item in group.items" :key="item.blId" class="flex items-center gap-2">
+                                <div class="h-3.5 w-3.5 rounded shrink-0 ring-1 ring-white/10 bg-zinc-950"></div>
+                                <span class="text-sm text-white font-semibold shrink-0">{{ item.count }}×</span>
+                                <span class="text-sm text-zinc-400 truncate flex-1">{{ item.label }}</span>
+                                <span class="text-xs text-zinc-500 shrink-0">{{ item.cost }}</span>
+                            </div>
+                        </div>
+                    </template>
 
                     <!-- Border frame pieces -->
                     <template v-if="borderPiecesData.length">
@@ -360,6 +458,49 @@
                             </label>
                         </div>
                     </div>
+
+                    <!-- Height (only for height-map mosaics) -->
+                    <div v-if="storedHeightGrid" class="border-t border-zinc-800 pt-3 flex flex-col gap-2">
+                        <p class="text-[10px] text-zinc-500 uppercase tracking-widest">Height</p>
+                        <label class="flex items-center justify-between cursor-pointer">
+                            <span class="text-xs text-zinc-300">Height numbers</span>
+                            <div class="relative inline-flex items-center shrink-0">
+                                <input type="checkbox" v-model="showPlanHeightNums" class="sr-only peer">
+                                <div class="w-9 h-5 bg-zinc-700 rounded-full peer peer-checked:bg-amber-500 transition-colors"></div>
+                                <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+                            </div>
+                        </label>
+                        <label class="flex items-center justify-between cursor-pointer">
+                            <span class="text-xs text-zinc-300">Height colors</span>
+                            <div class="relative inline-flex items-center shrink-0">
+                                <input type="checkbox" v-model="showPlanHeightColors" class="sr-only peer">
+                                <div class="w-9 h-5 bg-zinc-700 rounded-full peer peer-checked:bg-amber-500 transition-colors"></div>
+                                <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
+                            </div>
+                        </label>
+                        <div v-if="showPlanHeightColors" class="flex flex-col gap-0.5">
+                            <div class="h-2.5 rounded" :style="{ background: heightLegendGradient }"></div>
+                            <div class="flex justify-between text-[10px] text-zinc-500"><span>0 plates</span><span>{{ supportPieces.maxH }} plates</span></div>
+                        </div>
+
+                        <div v-if="supportPieces.layers.length" class="flex flex-col gap-1 mt-1">
+                            <div class="flex justify-between text-xs text-zinc-400">
+                                <span>Build layer</span>
+                                <span class="text-white font-semibold">{{ planLayerLabel }}</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <button @click="stepPlanLayer(-1)" class="w-6 h-6 rounded bg-zinc-800 text-zinc-300 hover:bg-zinc-700 text-xs font-bold shrink-0">‹</button>
+                                <input type="range" min="0" :max="supportPieces.layers.length" step="1" :value="planLayerSlider"
+                                    @input="planLayer = Number($event.target.value) === supportPieces.layers.length ? -1 : Number($event.target.value)"
+                                    class="flex-1 accent-amber-500">
+                                <button @click="stepPlanLayer(1)" class="w-6 h-6 rounded bg-zinc-800 text-zinc-300 hover:bg-zinc-700 text-xs font-bold shrink-0">›</button>
+                            </div>
+                            <p class="text-[10px] text-zinc-500 leading-relaxed">
+                                Build bottom-up: step through the black support layers (bricks are 3 plates tall), then place the colored top.
+                            </p>
+                        </div>
+                    </div>
+
                     <div class="border-t border-zinc-800 pt-3">
                         <p class="text-[10px] text-zinc-500 uppercase tracking-widest mb-2">Share Build Plan</p>
                         <button
@@ -424,38 +565,31 @@
                 </div>
             </div>
 
-            <canvas
-                v-if="!useImageStore().previewArtOnWall"
-                ref="legoCanvasEl"
-                id="legoCanvas"
-                class="max-w-full max-h-full shadow-[0_0_80px_rgba(0,0,0,0.9)]"
-                :style="useMenuStore().menuItemShow === 'B' ? { display: 'none' } : {}"
-            ></canvas>
+            <div
+                v-if="useImageStore().dualImage && !imageBSrc && !isViewOnly && useMenuStore().menuItemShow !== 'B'"
+                class="absolute top-3 left-1/2 -translate-x-1/2 z-[5] bg-zinc-900/90 border border-amber-500/40 text-amber-300 text-xs rounded-full px-3 py-1.5"
+            >Dual image mode: upload image B in the Image tab</div>
 
-            <!-- Original image overlay for drag-to-reposition -->
-            <img
-                v-if="showOriginalOverlay && originalImageSrc && !useImageStore().previewArtOnWall"
-                :src="originalImageSrc"
-                alt=""
-                draggable="false"
-                :style="overlayStyle"
-                class="absolute opacity-50 select-none pointer-events-auto"
-                :class="isDraggingOverlay ? 'cursor-grabbing' : 'cursor-grab'"
-                @mousedown.prevent="startOverlayDrag"
-            />
+            <!-- 3D view — always the preview (lazy-loaded so three.js is a separate chunk) -->
+            <ClientOnly v-if="useMenuStore().menuItemShow !== 'B'">
+                <LazyMosaic3D
+                    :placements="storedPlacements"
+                    :height-grid="storedHeightGrid"
+                    :num-studs-x="flatImageShown ? useImageStore().width * 16 : storedNumStudsX"
+                    :num-studs-y="flatImageShown ? useImageStore().height * 16 : storedNumStudsY"
+                    :colors="colorRgbList"
+                    :slope-brick-idx="IDX_SLOPE_MAIN"
+                    :room="useImageStore().previewArtOnWall"
+                    :show-grid="useImageStore().showGrid"
+                    :flat-image="flatImageShown ? flatImageUrl : ''"
+                    :overlay="overlay3D"
+                    @overlay-move="p => { useImageStore().x = p.x; useImageStore().y = p.y }"
+                    @overlay-end="initConvert()"
+                />
+            </ClientOnly>
 
-            <div v-if="useImageStore().previewArtOnWall" ref="wallContainerEl" class="w-full h-full flex items-center justify-center relative">
-                <img id="preview-image" alt="Preview Image" class="rounded-xl w-full max-h-full object-contain shadow-2xl" src="../assets/images/livingroom.jpg">
-                <div
-                    id="image-container"
-                    :style="wallContainerStyle"
-                    class="absolute h-auto w-[20px] border-4 border-black overflow-hidden rounded-sm shadow-2xl select-none"
-                    :class="isDraggingWall ? 'cursor-grabbing' : 'cursor-grab'"
-                    @mousedown.prevent="startWallDrag"
-                >
-                    <canvas id="legoCanvas" class="w-full h-auto"></canvas>
-                </div>
-            </div>
+            <!-- Hidden 2D render target (still drawn by the pipeline; not shown) -->
+            <canvas ref="legoCanvasEl" id="legoCanvas" style="display:none"></canvas>
 
             <div v-if="isProcessing" class="absolute inset-0 flex items-center justify-center bg-zinc-950/60 z-10">
                 <div class="flex flex-col items-center gap-2">
@@ -478,6 +612,7 @@
             <div class="w-3.5 h-3.5 rounded-sm shrink-0 ring-1 ring-white/20" :style="{ backgroundColor: planTooltip.colorRgba }"></div>
             <span class="font-semibold text-white">{{ planTooltip.brickLabel }}</span>
             <span class="text-zinc-400">· {{ planTooltip.colorName }}</span>
+            <span v-if="planTooltip.height !== null" class="text-zinc-500">· height {{ planTooltip.height }}</span>
         </div>
     </Teleport>
 
@@ -498,7 +633,12 @@ const BRICK_DEFS_MAIN = [
     { id: '2x2L', label: '2×2 Corner', area: 3,  blId: '2420',  priceDKK: 0.35  },
     { id: '1x2',  label: '1×2',        area: 2,  blId: '3023',  priceDKK: 0.30  },
     { id: '1x1',  label: '1×1',        area: 1,  blId: '3024',  priceDKK: 0.25  },
+    // Dual-image mode only (appended last so older share links keep their indices)
+    { id: '1x1S', label: '1×1 Cheese Slope', area: 1, blId: '54200', priceDKK: 0.30 },
 ]
+const IDX_SLOPE_MAIN = BRICK_DEFS_MAIN.findIndex(b => b.id === '1x1S')
+// Dual mosaics consist only of cheese slopes, so checking the first placement is enough
+const isDualPlacements = plc => !!plc && plc.length >= 6 && plc[5] === IDX_SLOPE_MAIN
 // L-piece cell offsets — must match worker L_CELLS
 const L_CELLS_MAIN = [
     [[0,0],[0,1],[1,1]], // orientation 0: missing top-right
@@ -536,6 +676,136 @@ const BORDER_TILE_1XN_DEFS = [
     { n: 2, blId: '3069',  label: '1×2 Tile',   priceDKK: 0.35 },
     { n: 1, blId: '3070',  label: '1×1 Tile',   priceDKK: 0.30 },
 ]
+// ── Height map support parts (all Black, BL color 11) ───────────────────────
+// Ordered largest-first; within the same area the cheaper part comes first.
+// A brick is 3 plates tall and much cheaper than 3 stacked plates, so the support
+// under each raised stud uses as many bricks as possible and plates for the remainder.
+const SUPPORT_BRICK_DEFS = [
+    { w: 2, h: 8, blId: '3007', label: '2×8 Brick', priceDKK: 1.40 },
+    { w: 2, h: 6, blId: '2456', label: '2×6 Brick', priceDKK: 1.10 },
+    { w: 2, h: 4, blId: '3001', label: '2×4 Brick', priceDKK: 0.70 },
+    { w: 1, h: 8, blId: '3008', label: '1×8 Brick', priceDKK: 0.80 },
+    { w: 1, h: 6, blId: '3009', label: '1×6 Brick', priceDKK: 0.60 },
+    { w: 2, h: 3, blId: '3002', label: '2×3 Brick', priceDKK: 0.55 },
+    { w: 2, h: 2, blId: '3003', label: '2×2 Brick', priceDKK: 0.40 },
+    { w: 1, h: 4, blId: '3010', label: '1×4 Brick', priceDKK: 0.40 },
+    { w: 1, h: 3, blId: '3622', label: '1×3 Brick', priceDKK: 0.35 },
+    { w: 1, h: 2, blId: '3004', label: '1×2 Brick', priceDKK: 0.30 },
+    { w: 1, h: 1, blId: '3005', label: '1×1 Brick', priceDKK: 0.20 },
+]
+const SUPPORT_PLATE_DEFS = [
+    { w: 4, h: 4, blId: '3031', label: '4×4 Plate', priceDKK: 1.50 },
+    { w: 2, h: 8, blId: '3034', label: '2×8 Plate', priceDKK: 1.50 },
+    { w: 2, h: 6, blId: '3795', label: '2×6 Plate', priceDKK: 1.00 },
+    { w: 2, h: 4, blId: '3020', label: '2×4 Plate', priceDKK: 0.60 },
+    { w: 2, h: 3, blId: '3021', label: '2×3 Plate', priceDKK: 0.50 },
+    { w: 2, h: 2, blId: '3022', label: '2×2 Plate', priceDKK: 0.40 },
+    { w: 1, h: 4, blId: '3710', label: '1×4 Plate', priceDKK: 0.35 },
+    { w: 1, h: 3, blId: '3623', label: '1×3 Plate', priceDKK: 0.30 },
+    { w: 1, h: 2, blId: '3023', label: '1×2 Plate', priceDKK: 0.30 },
+    { w: 1, h: 1, blId: '3024', label: '1×1 Plate', priceDKK: 0.25 },
+]
+
+// Greedy-pack one support layer: `mask` marks studs needing a part at this layer.
+// Parts stay within their 16×16 baseplate. `rotateFirst` alternates orientation
+// preference between layers so stacked layers overlap seams and lock together.
+function packSupportLayer(mask, nX, nY, defs, counts, rotateFirst, out) {
+    const used = new Uint8Array(nX * nY)
+    for (let y = 0; y < nY; y++) for (let x = 0; x < nX; x++) {
+        const n = y * nX + x
+        if (!mask[n] || used[n]) continue
+        const bpEndX = Math.min(((x >> 4) + 1) * 16, nX)
+        const bpEndY = Math.min(((y >> 4) + 1) * 16, nY)
+        for (let di = 0; di < defs.length; di++) {
+            const d = defs[di]
+            const shapes = d.w === d.h ? [[d.w, d.h]] : rotateFirst ? [[d.h, d.w], [d.w, d.h]] : [[d.w, d.h], [d.h, d.w]]
+            let placed = false
+            for (const [w, h] of shapes) {
+                if (x + w > bpEndX || y + h > bpEndY) continue
+                let ok = true
+                for (let dy = 0; dy < h && ok; dy++) for (let dx = 0; dx < w; dx++) {
+                    const m = (y + dy) * nX + x + dx
+                    if (!mask[m] || used[m]) { ok = false; break }
+                }
+                if (!ok) continue
+                for (let dy = 0; dy < h; dy++) for (let dx = 0; dx < w; dx++) used[(y + dy) * nX + x + dx] = 1
+                counts[di]++
+                out.push({ x, y, w, h, label: d.label })
+                placed = true
+                break
+            }
+            if (placed) break
+        }
+    }
+}
+
+// For every stud of height s (in plates): floor(s/3) bricks at the bottom, then s%3 plates.
+function computeSupportPieces(heightGrid, nX, nY) {
+    const N = nX * nY
+    let maxH = 0
+    for (let n = 0; n < N; n++) if (heightGrid[n] > maxH) maxH = heightGrid[n]
+    const brickCounts = new Array(SUPPORT_BRICK_DEFS.length).fill(0)
+    const plateCounts = new Array(SUPPORT_PLATE_DEFS.length).fill(0)
+    const mask = new Uint8Array(N)
+    const layers = [] // build steps: { kind: 'brick'|'plate', z (plate level of its bottom), pieces: [{x,y,w,h,label}] }
+    let layer = 0
+    // Brick layers (layer k occupies plate-levels 3k…3k+2)
+    for (let k = 0; 3 * (k + 1) <= maxH; k++) {
+        for (let n = 0; n < N; n++) mask[n] = Math.floor(heightGrid[n] / 3) > k ? 1 : 0
+        const pieces = []
+        packSupportLayer(mask, nX, nY, SUPPORT_BRICK_DEFS, brickCounts, (layer++ & 1) === 1, pieces)
+        if (pieces.length) layers.push({ kind: 'brick', z: 3 * k, pieces })
+    }
+    // Plate layers: plate-level z holds a plate where 3·bricks ≤ z < height
+    for (let z = 0; z < maxH; z++) {
+        let any = false
+        for (let n = 0; n < N; n++) {
+            const s = heightGrid[n]
+            const v = z >= 3 * Math.floor(s / 3) && z < s ? 1 : 0
+            mask[n] = v; if (v) any = true
+        }
+        if (!any) continue
+        const pieces = []
+        packSupportLayer(mask, nX, nY, SUPPORT_PLATE_DEFS, plateCounts, (layer++ & 1) === 1, pieces)
+        layers.push({ kind: 'plate', z, pieces })
+    }
+    // Build order: bottom-up by starting level (bricks before plates at the same level)
+    layers.sort((a, b) => a.z - b.z || (a.kind === 'brick' ? -1 : 1))
+    const toItems = (defs, counts) => defs.map((d, i) => ({ blId: d.blId, label: d.label, priceDKK: d.priceDKK, count: counts[i] })).filter(i => i.count > 0)
+    return { bricks: toItems(SUPPORT_BRICK_DEFS, brickCounts), plates: toItems(SUPPORT_PLATE_DEFS, plateCounts), layers, maxH }
+}
+
+// Height colour ramp (viridis-like): low = deep purple, high = yellow
+const HEIGHT_RAMP = [[68,1,84],[59,82,139],[33,145,140],[94,201,98],[253,231,37]]
+function heightRampColor(t, alpha = 1) {
+    t = Math.max(0, Math.min(1, t)) * (HEIGHT_RAMP.length - 1)
+    const i = Math.min(HEIGHT_RAMP.length - 2, Math.floor(t)), f = t - i
+    const a = HEIGHT_RAMP[i], b = HEIGHT_RAMP[i + 1]
+    return `rgba(${Math.round(a[0] + (b[0] - a[0]) * f)},${Math.round(a[1] + (b[1] - a[1]) * f)},${Math.round(a[2] + (b[2] - a[2]) * f)},${alpha})`
+}
+
+// Relief shading: darken studs sitting lower than their upper-left neighbours (light from
+// the top-left), lighten edges that stand above their lower-right neighbours.
+function drawHeightShading(ctx, heightGrid, nX, nY, studSz, x0 = 0, y0 = 0, cols = nX, rows = nY) {
+    if (!heightGrid) return
+    const hAt = (x, y) => (x < 0 || y < 0 || x >= nX || y >= nY) ? null : heightGrid[y * nX + x]
+    for (let y = y0; y < y0 + rows; y++) for (let x = x0; x < x0 + cols; x++) {
+        const h = hAt(x, y)
+        if (h === null) continue
+        let up = 0, down = 0
+        for (const [dx, dy] of [[-1, 0], [0, -1], [-1, -1]]) { const o = hAt(x + dx, y + dy); if (o !== null && o - h > up) up = o - h }
+        for (const [dx, dy] of [[1, 0], [0, 1], [1, 1]])    { const o = hAt(x + dx, y + dy); if (o !== null && h - o > down) down = h - o }
+        const px = (x - x0) * studSz, py = (y - y0) * studSz
+        if (up > 0) {
+            ctx.fillStyle = `rgba(0,0,0,${Math.min(0.55, 0.12 + 0.07 * up)})`
+            ctx.fillRect(px, py, studSz, studSz)
+        } else if (down > 0) {
+            ctx.fillStyle = `rgba(255,255,255,${Math.min(0.3, 0.06 + 0.04 * down)})`
+            ctx.fillRect(px, py, studSz, studSz)
+        }
+    }
+}
+
 const BORDER_PIN_BRICK_DEF = { blId: '2458', label: '1×2 Brick w/ Pin', priceDKK: 0.50 }
 const BORDER_TECH_PIN_DEF  = { blId: '2780', label: 'Technic Pin',      priceDKK: 0.20 }
 
@@ -596,6 +866,63 @@ function base64urlToArray(str) {
 }
 
 const showOriginalOverlay = ref(false)
+
+// ── Dual image (lenticular cheese-slope) mode ──
+const imageBSrc = ref('')
+let fileB = null
+const isDualMosaic = computed(() => isDualPlacements(storedPlacements.value))
+
+function fileInputBChange(e) {
+    fileB = e.target.files[0] || null
+    if (!fileB) return
+    const reader = new FileReader()
+    reader.onload = ev => { imageBSrc.value = ev.target.result }
+    reader.readAsDataURL(fileB)
+    initConvert()
+}
+
+// Draw a dual (cheese slope) mosaic. Even columns hold image A (slopes facing left),
+// odd columns image B (facing right).
+//  mode 'left'  → what a viewer on the left sees: image A's column fills both columns of its pair
+//  mode 'right' → same for image B
+//  mode 'built' → every slope as placed, shaded by facing so the ridges read
+function drawDualMosaic(ctx, plc, nX, nY, ss, mode) {
+    const grid = new Int32Array(nX * nY).fill(-1)
+    for (let i = 0, n = plc.length / 6; i < n; i++) grid[plc[i*6+1] * nX + plc[i*6]] = plc[i*6+4]
+    const opts = useImageStore().allColorOptions
+    for (let y = 0; y < nY; y++) for (let x = 0; x < nX; x++) {
+        const srcX = mode === 'left' ? (x & ~1) : mode === 'right' ? Math.min(nX - 1, x | 1) : x
+        const ci = grid[y * nX + srcX]
+        const c = ci >= 0 ? opts[ci]?.color : null
+        ctx.fillStyle = c ? `rgb(${c[0]},${c[1]},${c[2]})` : '#000'
+        ctx.fillRect(x * ss, y * ss, ss, ss)
+        if (mode === 'built') {
+            // Sloped face: lighter toward the ridge (high side), darker toward the valley
+            const left = (x & 1) === 0
+            const g = ctx.createLinearGradient(x * ss, 0, (x + 1) * ss, 0)
+            g.addColorStop(left ? 0 : 1, 'rgba(0,0,0,0.22)')
+            g.addColorStop(left ? 1 : 0, 'rgba(255,255,255,0.12)')
+            ctx.fillStyle = g
+            ctx.fillRect(x * ss, y * ss, ss, ss)
+        }
+    }
+    if (mode === 'built') {
+        // Thin seam between rows of slopes
+        ctx.fillStyle = 'rgba(0,0,0,0.18)'
+        for (let y = 1; y < nY; y++) ctx.fillRect(0, y * ss, nX * ss, 1)
+    }
+}
+
+// ── 3D preview (always on; the Plan tab keeps its own 2D canvas) ──
+// Stable color list for the 3D view (only recomputes when the palette itself changes)
+const colorRgbList = computed(() => useImageStore().allColorOptions.map(o => o.color))
+// Mosaic toggle off → the 3D view shows the adjusted image as a flat print
+const flatImageUrl = ref('')
+const flatImageShown = computed(() => !useImageStore().previewShowMosaic && !!flatImageUrl.value)
+// Show original → see-through photo in 3D, draggable to reposition (canvas px, 8 px per stud)
+const overlay3D = computed(() => showOriginalOverlay.value && originalImageSrc.value && overlayImgCanvasW.value
+    ? { src: originalImageSrc.value, x: useImageStore().x, y: useImageStore().y, w: overlayImgCanvasW.value, h: overlayImgCanvasH.value }
+    : null)
 const originalImageSrc = ref('')
 const brickCountsData = ref(null) // Int32Array from worker: [BRICK_DEFS.length × numColors]
 const brickSizeOptions = ref([
@@ -617,8 +944,12 @@ const enabledBrickIds = computed(() => {
 const storedPlacements  = ref(null)  // Int32Array (6 values per brick)
 const storedNumStudsX   = ref(0)
 const storedNumStudsY   = ref(0)
+const storedHeightGrid  = ref(null)  // Uint8Array (plates of elevation per stud) or null
 const showPlanOutlines  = ref(true)
 const showPlanGrid      = ref(true)
+const showPlanHeightNums   = ref(true)   // height number on every stud (height-map mosaics)
+const showPlanHeightColors = ref(false)  // colour-coded height overlay
+const planLayer         = ref(-1)        // -1 = colored top layer, 0…n = black support build layer
 const buildPlanCanvasEl = ref(null)
 const buildPlanAreaEl   = ref(null)
 const selectedBP        = ref(-1)    // -1 = all, 0…n = baseplate index
@@ -627,107 +958,18 @@ const isViewOnly        = ref(false)   // true when loaded from a shared plan UR
 
 // Build plan hover tooltip
 const buildPlanLookup   = ref(null)   // Int32Array: studY*nX+studX → placementIdx (-1=none)
-const planTooltip       = ref({ show: false, x: 0, y: 0, colorName: '', colorRgba: '', brickLabel: '' })
+const planTooltip       = ref({ show: false, x: 0, y: 0, colorName: '', colorRgba: '', brickLabel: '', height: null })
 let   buildRenderState  = { studSz: 8, originSX: 0, originSY: 0 }
 
 watch(selectedBP,        () => nextTick(renderBuildPlan))
 watch(storedPlacements,  buildLookupMap)
 watch(showPlanOutlines,  () => nextTick(renderBuildPlan))
 watch(showPlanGrid,      () => nextTick(renderBuildPlan))
-const isDraggingOverlay = ref(false)
+watch([showPlanHeightNums, showPlanHeightColors, planLayer], () => nextTick(renderBuildPlan))
 const legoCanvasEl = ref(null)
-const wallContainerEl = ref(null)
-const isDraggingWall = ref(false)
-const wallMosaicPos = ref({ x: null, y: null })
-
-const wallContainerStyle = computed(() => {
-    if (wallMosaicPos.value.x === null) {
-        return { top: '30%', left: '50%', transform: 'translate(-50%, -50%)' }
-    }
-    return { top: wallMosaicPos.value.y + 'px', left: wallMosaicPos.value.x + 'px', transform: 'none' }
-})
-
-function startWallDrag(e) {
-    const container = wallContainerEl.value
-    if (!container) return
-    const containerRect = container.getBoundingClientRect()
-    const el = e.currentTarget
-    const elRect = el.getBoundingClientRect()
-
-    // On first drag, convert CSS-centred position into absolute pixels
-    if (wallMosaicPos.value.x === null) {
-        wallMosaicPos.value = {
-            x: elRect.left - containerRect.left,
-            y: elRect.top  - containerRect.top
-        }
-    }
-
-    isDraggingWall.value = true
-    const startX    = e.clientX
-    const startY    = e.clientY
-    const startPosX = wallMosaicPos.value.x
-    const startPosY = wallMosaicPos.value.y
-
-    function onMove(ev) {
-        wallMosaicPos.value = {
-            x: startPosX + (ev.clientX - startX),
-            y: startPosY + (ev.clientY - startY)
-        }
-    }
-    function onUp() {
-        isDraggingWall.value = false
-        window.removeEventListener('mousemove', onMove)
-        window.removeEventListener('mouseup',   onUp)
-    }
-    window.addEventListener('mousemove', onMove)
-    window.addEventListener('mouseup',   onUp)
-}
 // Dimensions of the hidden offscreen canvas (set in convertToLego after sizing)
 const overlayImgCanvasW = ref(0)
 const overlayImgCanvasH = ref(0)
-
-const overlayStyle = computed(() => {
-    const legoC = legoCanvasEl.value || document.getElementById('legoCanvas')
-    if (!legoC || !legoC.width || !overlayImgCanvasW.value) return { display: 'none' }
-    // Display scale: how many CSS px per legoCanvas natural pixel
-    const scale = legoC.offsetWidth / legoC.width
-    const container = legoC.parentElement
-    if (!container) return { display: 'none' }
-    const containerRect = container.getBoundingClientRect()
-    const canvasRect   = legoC.getBoundingClientRect()
-    const left = canvasRect.left - containerRect.left + useImageStore().x * scale
-    const top  = canvasRect.top  - containerRect.top  + useImageStore().y * scale
-    return {
-        left:   left + 'px',
-        top:    top  + 'px',
-        // Size = hidden canvas dimensions converted to display pixels
-        width:  overlayImgCanvasW.value * scale + 'px',
-        height: overlayImgCanvasH.value * scale + 'px',
-    }
-})
-
-function startOverlayDrag(e) {
-    isDraggingOverlay.value = true
-    const startX = e.clientX
-    const startY = e.clientY
-    const startStoreX = useImageStore().x
-    const startStoreY = useImageStore().y
-    const canvas = legoCanvasEl.value || document.getElementById('legoCanvas')
-    const scale = canvas ? canvas.offsetWidth / canvas.width : 1
-
-    function onMove(ev) {
-        useImageStore().x = startStoreX + Math.round((ev.clientX - startX) / scale)
-        useImageStore().y = startStoreY + Math.round((ev.clientY - startY) / scale)
-    }
-    function onUp() {
-        isDraggingOverlay.value = false
-        initConvert()
-        window.removeEventListener('mousemove', onMove)
-        window.removeEventListener('mouseup',   onUp)
-    }
-    window.addEventListener('mousemove', onMove)
-    window.addEventListener('mouseup',   onUp)
-}
 
 const panelWidth = ref(340) // default ≈ w-80+
 
@@ -841,6 +1083,44 @@ const borderPriceDKK = computed(() =>
     borderPiecesData.value.reduce((sum, g) => sum + g.items.reduce((s, i) => s + i.count * i.priceDKK, 0), 0)
 )
 
+// ── Height map support pieces ───────────────────────────────────────────────
+const supportPieces = computed(() => {
+    const hg = storedHeightGrid.value
+    if (!hg) return { bricks: [], plates: [], layers: [], maxH: 0 }
+    return computeSupportPieces(hg, storedNumStudsX.value, storedNumStudsY.value)
+})
+// ── Plan: height display helpers ──
+const heightLegendGradient = `linear-gradient(to right, ${HEIGHT_RAMP.map(c => `rgb(${c.join(',')})`).join(', ')})`
+// Slider position: support layers 0…n-1, then n = colored top
+const planLayerSlider = computed(() => planLayer.value < 0 ? supportPieces.value.layers.length : planLayer.value)
+const planLayerLabel = computed(() => {
+    const layers = supportPieces.value.layers
+    if (planLayer.value < 0 || !layers[planLayer.value]) return `Colored top · ${layers.length + 1}/${layers.length + 1}`
+    const L = layers[planLayer.value]
+    return `${planLayer.value + 1}/${layers.length + 1} · black ${L.kind}s @ ${L.z} plates`
+})
+function stepPlanLayer(d) {
+    const n = supportPieces.value.layers.length
+    const next = Math.max(0, Math.min(n, planLayerSlider.value + d))
+    planLayer.value = next === n ? -1 : next
+}
+// New mosaic → layer list changes; fall back to the colored top if the index is gone
+watch(() => supportPieces.value.layers.length, n => { if (planLayer.value >= n) planLayer.value = -1 })
+
+const supportPiecesData = computed(() => {
+    const withCost = items => items.map(i => ({ ...i, cost: formatPrice(i.count * i.priceDKK) }))
+    return [
+        { id: 'support-bricks', label: 'HEIGHT SUPPORT BRICKS (BLACK)', items: withCost(supportPieces.value.bricks) },
+        { id: 'support-plates', label: 'HEIGHT SUPPORT PLATES (BLACK)', items: withCost(supportPieces.value.plates) },
+    ].filter(g => g.items.length > 0)
+})
+const supportPiecesTotal = computed(() =>
+    [...supportPieces.value.bricks, ...supportPieces.value.plates].reduce((s, i) => s + i.count, 0)
+)
+const supportPriceDKK = computed(() =>
+    [...supportPieces.value.bricks, ...supportPieces.value.plates].reduce((s, i) => s + i.count * i.priceDKK, 0)
+)
+
 const totalPrice = computed(() => {
     let tileDKK
     if (brickCountsData.value) {
@@ -855,7 +1135,7 @@ const totalPrice = computed(() => {
         tileDKK = 0.25 * (16 * useImageStore().width) * (16 * useImageStore().height)
     }
     const baseplateDKK = 30 * useImageStore().width * useImageStore().height
-    const totalDKK = tileDKK + baseplateDKK + borderPriceDKK.value
+    const totalDKK = tileDKK + baseplateDKK + borderPriceDKK.value + supportPriceDKK.value
     const converted = totalDKK * locales[selectedLocale.value].rate
     return `≈${converted.toFixed(1)} ${locales[selectedLocale.value].currency}`
 })
@@ -864,7 +1144,7 @@ const totalPiecesCount = computed(() => {
     if (!brickCountsData.value) return (16 * useImageStore().width) * (16 * useImageStore().height)
     let total = 0
     for (let i = 0; i < brickCountsData.value.length; i++) total += brickCountsData.value[i]
-    return total + borderPiecesTotal.value
+    return total + borderPiecesTotal.value + supportPiecesTotal.value
 })
 
 const piecesData = computed(() => {
@@ -885,7 +1165,8 @@ const piecesData = computed(() => {
                 })
                 .filter(Boolean)
             if (!colorRows.length) return null
-            return { id: brick.id, label: brick.label, colorRows }
+            const heading = brick.id === '1x1S' ? '1×1 CHEESE SLOPES' : `${brick.label.toUpperCase()} PLATES`
+            return { id: brick.id, label: brick.label, heading, colorRows }
         })
         .filter(Boolean)
 })
@@ -908,9 +1189,6 @@ let ctx
 let brightnessInput
 let contrastInput
 let rememberedColorToggle = true
-let preview_image
-let preview_mosaic
-let image_container
 
 let mosaicWorker = null
 const isProcessing = ref(false)
@@ -934,7 +1212,6 @@ const baseURL = useRuntimeConfig().app.baseURL
         ctx = canvas.getContext('2d');
         brightnessInput = document.getElementById('brightness'); 
         contrastInput = document.getElementById('contrast'); 
-        preview_mosaic = document.getElementById('preview-mosaic')
 
         mosaicWorker = new Worker(baseURL + 'mosaic.worker.js');
         mosaicWorker.onmessage = handleWorkerMessage;
@@ -974,8 +1251,9 @@ const baseURL = useRuntimeConfig().app.baseURL
     }
 
     function handleWorkerMessage(e) {
-        const { placements: plcBuffer, brickCounts: brickCountsBuf, numStudsX, numStudsY, generation } = e.data;
+        const { placements: plcBuffer, brickCounts: brickCountsBuf, heightGrid: heightBuf, numStudsX, numStudsY, generation } = e.data;
         if (generation !== processingGeneration) return;
+        const heightGrid = heightBuf ? new Uint8Array(heightBuf) : null;
 
         const plc = new Int32Array(plcBuffer);
         const brickCountsArr = new Int32Array(brickCountsBuf);
@@ -986,7 +1264,10 @@ const baseURL = useRuntimeConfig().app.baseURL
         legoCanvas = document.getElementById('legoCanvas');
         legoCtx = legoCanvas.getContext('2d');
 
-        for (let i = 0; i < numPlacements; i++) {
+        const dual = isDualPlacements(plc);
+        if (dual) drawDualMosaic(legoCtx, plc, numStudsX, numStudsY, studSize, useImageStore().dualPreview);
+
+        for (let i = 0; i < (dual ? 0 : numPlacements); i++) {
             const sx       = plc[i * 6];
             const sy       = plc[i * 6 + 1];
             const w        = plc[i * 6 + 2]; // 0 = L-piece
@@ -1007,6 +1288,8 @@ const baseURL = useRuntimeConfig().app.baseURL
                 drawBrickOnCanvas(legoCtx, sx * studSize, sy * studSize, w, h, colorRgba, showStuds, studSize);
             }
         }
+
+        drawHeightShading(legoCtx, heightGrid, numStudsX, numStudsY, studSize);
 
         // Baseplate grid lines drawn as a single post-pass (cleaner than per-stud)
         if (useImageStore().showGrid && !useImageStore().previewArtOnWall) {
@@ -1035,6 +1318,7 @@ const baseURL = useRuntimeConfig().app.baseURL
         storedPlacements.value = plc;
         storedNumStudsX.value  = numStudsX;
         storedNumStudsY.value  = numStudsY;
+        storedHeightGrid.value = heightGrid;
         if (useMenuStore().menuItemShow === 'B') nextTick(renderBuildPlan);
 
         isProcessing.value = false;
@@ -1085,6 +1369,15 @@ const baseURL = useRuntimeConfig().app.baseURL
         if (studX < 0 || studY < 0 || studX >= nX || studY >= nY) {
             planTooltip.value = { ...planTooltip.value, show: false }; return
         }
+        // Support build layer selected → describe the black support piece under the cursor
+        const layerInfo = planLayer.value >= 0 ? supportPieces.value.layers[planLayer.value] : null
+        if (layerInfo) {
+            const p = layerInfo.pieces.find(q => studX >= q.x && studX < q.x + q.w && studY >= q.y && studY < q.y + q.h)
+            planTooltip.value = p
+                ? { show: true, x: e.clientX + 16, y: e.clientY - 10, colorName: `Black · from ${layerInfo.z} plates up`, colorRgba: '#18181b', brickLabel: p.label, height: null }
+                : { ...planTooltip.value, show: false }
+            return
+        }
         const pIdx = buildPlanLookup.value[studY * nX + studX]
         if (pIdx < 0) { planTooltip.value = { ...planTooltip.value, show: false }; return }
         const plc  = storedPlacements.value
@@ -1101,7 +1394,10 @@ const baseURL = useRuntimeConfig().app.baseURL
             y:          e.clientY - 10,
             colorName:  colorOpt?.colorName  || 'Unknown',
             colorRgba:  c ? `rgba(${c[0]},${c[1]},${c[2]},1)` : '#444',
-            brickLabel: brickDef ? (w === 0 ? brickDef.label + ' corner plate' : brickDef.label + ' plate') : 'plate',
+            brickLabel: !brickDef ? 'plate'
+                : bi === IDX_SLOPE_MAIN ? `${brickDef.label} facing ${(studX & 1) === 0 ? 'left (image A)' : 'right (image B)'}`
+                : w === 0 ? brickDef.label + ' corner plate' : brickDef.label + ' plate',
+            height:     storedHeightGrid.value ? storedHeightGrid.value[studY * nX + studX] : null,
         }
     }
 
@@ -1273,6 +1569,19 @@ const baseURL = useRuntimeConfig().app.baseURL
                     (Math.floor(sx/16) !== selectedBP.value % W ||
                      Math.floor(sy/16) !== Math.floor(selectedBP.value / W))) continue
 
+                if (plc[i*6+5] === IDX_SLOPE_MAIN) {
+                    // Cheese slopes have no stud: draw an arrow pointing down the slope
+                    // (even column ◀ faces left / image A, odd column ▶ faces right / image B)
+                    const cx = (sx - originSX + 0.5) * studSz, cy = (sy - originSY + 0.5) * studSz
+                    const a = studSz * 0.26, dir = (sx & 1) === 0 ? -1 : 1
+                    ctx.beginPath()
+                    ctx.moveTo(cx + dir * a, cy)
+                    ctx.lineTo(cx - dir * a * 0.7, cy - a)
+                    ctx.lineTo(cx - dir * a * 0.7, cy + a)
+                    ctx.closePath()
+                    ctx.fill()
+                    continue
+                }
                 const cells = w === 0
                     ? L_CELLS_MAIN[h-1].map(([dx,dy]) => [sx+dx, sy+dy])
                     : Array.from({length: h}, (_,dy) =>
@@ -1286,6 +1595,68 @@ const baseURL = useRuntimeConfig().app.baseURL
                         knobR, 0, Math.PI * 2
                     )
                     ctx.fill()
+                }
+            }
+        }
+
+        // ── Height display ───────────────────────────────────────────────
+        const hg = storedHeightGrid.value
+        const viewCols = selectedBP.value >= 0 ? 16 : nX
+        const viewRows = selectedBP.value >= 0 ? 16 : nY
+        const layerInfo = hg && planLayer.value >= 0 ? supportPieces.value.layers[planLayer.value] : null
+        if (hg && !layerInfo) {
+            drawHeightShading(ctx, hg, nX, nY, studSz, originSX, originSY, viewCols, viewRows)
+            const maxH = supportPieces.value.maxH || 1
+            // Colour-coded height overlay
+            if (showPlanHeightColors.value) {
+                for (let gy = 0; gy < viewRows; gy++) for (let gx = 0; gx < viewCols; gx++) {
+                    const sx = originSX + gx, sy = originSY + gy
+                    if (sx >= nX || sy >= nY) continue
+                    ctx.fillStyle = heightRampColor(hg[sy * nX + sx] / maxH, 0.62)
+                    ctx.fillRect(gx * studSz, gy * studSz, studSz, studSz)
+                }
+            }
+            // Height number (plates) on every raised stud
+            if (showPlanHeightNums.value && studSz >= 10) {
+                ctx.font = `bold ${Math.min(15, studSz * 0.55)}px sans-serif`
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+                for (let gy = 0; gy < viewRows; gy++) for (let gx = 0; gx < viewCols; gx++) {
+                    const sx = originSX + gx, sy = originSY + gy
+                    if (sx >= nX || sy >= nY) continue
+                    const hv = hg[sy * nX + sx]
+                    if (!hv) continue
+                    const cx = (gx + 0.5) * studSz, cy = (gy + 0.5) * studSz
+                    ctx.fillStyle = 'rgba(0,0,0,0.75)';  ctx.fillText(hv, cx + 0.6, cy + 0.6)
+                    ctx.fillStyle = 'rgba(255,255,255,0.95)'; ctx.fillText(hv, cx, cy)
+                }
+            }
+        }
+        // ── Support build layer: dim the colored top, draw the black pieces of this layer ──
+        if (layerInfo) {
+            ctx.fillStyle = 'rgba(9,9,11,0.85)'
+            ctx.fillRect(0, 0, cssW, cssH)
+            const isBrick = layerInfo.kind === 'brick'
+            for (const p of layerInfo.pieces) {
+                if (p.x < originSX || p.y < originSY || p.x >= originSX + viewCols || p.y >= originSY + viewRows) continue
+                const px = (p.x - originSX) * studSz, py = (p.y - originSY) * studSz
+                ctx.fillStyle = isBrick ? '#3f3f46' : '#52525b'
+                ctx.fillRect(px, py, p.w * studSz, p.h * studSz)
+                ctx.strokeStyle = 'rgba(251,191,36,0.85)'
+                ctx.lineWidth = Math.max(1, Math.min(2, studSz / 10))
+                ctx.strokeRect(px + 0.75, py + 0.75, p.w * studSz - 1.5, p.h * studSz - 1.5)
+                if (studSz >= 8) {
+                    ctx.fillStyle = 'rgba(255,255,255,0.14)'
+                    for (let dy = 0; dy < p.h; dy++) for (let dx = 0; dx < p.w; dx++) {
+                        ctx.beginPath()
+                        ctx.arc(px + (dx + 0.5) * studSz, py + (dy + 0.5) * studSz, studSz * 0.28, 0, Math.PI * 2)
+                        ctx.fill()
+                    }
+                }
+                if (Math.min(p.w, p.h) * studSz >= 16) {
+                    ctx.font = `bold ${Math.min(12, studSz * 0.55)}px sans-serif`
+                    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+                    ctx.fillStyle = 'rgba(255,255,255,0.85)'
+                    ctx.fillText(`${Math.min(p.w, p.h)}×${Math.max(p.w, p.h)}`, px + p.w * studSz / 2, py + p.h * studSz / 2)
                 }
             }
         }
@@ -1347,8 +1718,10 @@ const baseURL = useRuntimeConfig().app.baseURL
         const ss = 8
         legoC.width  = numStudsX * ss
         legoC.height = numStudsY * ss
-        const numP = placements.length / 6
+        const dual = isDualPlacements(placements)
+        const numP = dual ? 0 : placements.length / 6
         const showStuds = useImageStore().showStuds
+        if (dual) drawDualMosaic(ctx, placements, numStudsX, numStudsY, ss, useImageStore().dualPreview)
 
         for (let i = 0; i < numP; i++) {
             const sx = placements[i*6]; const sy = placements[i*6+1]
@@ -1363,6 +1736,7 @@ const baseURL = useRuntimeConfig().app.baseURL
                 drawBrickOnCanvas(ctx, sx*ss, sy*ss, w, h, color, showStuds, ss)
             }
         }
+        drawHeightShading(ctx, storedHeightGrid.value, numStudsX, numStudsY, ss)
         if (useImageStore().showGrid) {
             ctx.fillStyle = 'rgba(0,0,0,1)'
             for (let gx = 16; gx < numStudsX; gx += 16) ctx.fillRect(gx*ss, 0, 1, numStudsY*ss)
@@ -1374,17 +1748,22 @@ const baseURL = useRuntimeConfig().app.baseURL
         if (!storedPlacements.value) return
         shareStatus.value = 'copying'
         try {
+            // Format v2: [2, W, H, flags] + 6 bytes per placement + (flags&1 ? 1 height byte per stud : nothing)
             const plc = storedPlacements.value; const numP = plc.length / 6
-            const raw = new Uint8Array(3 + numP * 6)
-            raw[0] = 1; raw[1] = useImageStore().width & 0xFF; raw[2] = useImageStore().height & 0xFF
+            const hg  = storedHeightGrid.value
+            const HDR = 4
+            const raw = new Uint8Array(HDR + numP * 6 + (hg ? hg.length : 0))
+            raw[0] = 2; raw[1] = useImageStore().width & 0xFF; raw[2] = useImageStore().height & 0xFF
+            raw[3] = hg ? 1 : 0
             for (let i = 0; i < numP; i++) {
-                raw[3+i*6]   = plc[i*6]     & 0xFF
-                raw[3+i*6+1] = plc[i*6+1]   & 0xFF
-                raw[3+i*6+2] = plc[i*6+2]   & 0xFF
-                raw[3+i*6+3] = plc[i*6+3]   & 0xFF
-                raw[3+i*6+4] = (plc[i*6+4]+1) & 0xFF  // colorIdx+1 (0=none)
-                raw[3+i*6+5] = plc[i*6+5]   & 0xFF
+                raw[HDR+i*6]   = plc[i*6]     & 0xFF
+                raw[HDR+i*6+1] = plc[i*6+1]   & 0xFF
+                raw[HDR+i*6+2] = plc[i*6+2]   & 0xFF
+                raw[HDR+i*6+3] = plc[i*6+3]   & 0xFF
+                raw[HDR+i*6+4] = (plc[i*6+4]+1) & 0xFF  // colorIdx+1 (0=none)
+                raw[HDR+i*6+5] = plc[i*6+5]   & 0xFF
             }
+            if (hg) raw.set(hg, HDR + numP * 6)
             let data = raw; let prefix = 'r'
             if (typeof CompressionStream !== 'undefined') { data = await deflate(raw); prefix = 'z' }
             const encoded = prefix + arrayToBase64url(data)
@@ -1411,19 +1790,24 @@ const baseURL = useRuntimeConfig().app.baseURL
             const prefix = planStr[0]
             let raw = base64urlToArray(planStr.slice(1))
             if (prefix === 'z') raw = await inflate(raw)
-            if (raw[0] !== 1) return
+            const version = raw[0]
+            if (version !== 1 && version !== 2) return
             const W = raw[1]; const H = raw[2]
             useImageStore().width = W; useImageStore().height = H
-            const numP = Math.floor((raw.length - 3) / 6)
+            const HDR = version === 1 ? 3 : 4
+            const hasHeight = version === 2 && (raw[3] & 1) === 1
+            const heightLen = hasHeight ? W * 16 * H * 16 : 0
+            const numP = Math.floor((raw.length - HDR - heightLen) / 6)
             const placements = new Int32Array(numP * 6)
             for (let i = 0; i < numP; i++) {
-                placements[i*6]   = raw[3+i*6]
-                placements[i*6+1] = raw[3+i*6+1]
-                placements[i*6+2] = raw[3+i*6+2]
-                placements[i*6+3] = raw[3+i*6+3]
-                placements[i*6+4] = raw[3+i*6+4] - 1  // restore colorIdx
-                placements[i*6+5] = raw[3+i*6+5]
+                placements[i*6]   = raw[HDR+i*6]
+                placements[i*6+1] = raw[HDR+i*6+1]
+                placements[i*6+2] = raw[HDR+i*6+2]
+                placements[i*6+3] = raw[HDR+i*6+3]
+                placements[i*6+4] = raw[HDR+i*6+4] - 1  // restore colorIdx
+                placements[i*6+5] = raw[HDR+i*6+5]
             }
+            storedHeightGrid.value = hasHeight ? raw.slice(HDR + numP * 6, HDR + numP * 6 + heightLen) : null
             const numC = useImageStore().allColorOptions.length
             const bca  = new Int32Array(BRICK_DEFS_MAIN.length * numC)
             for (let i = 0; i < numP; i++) {
@@ -1472,33 +1856,53 @@ const baseURL = useRuntimeConfig().app.baseURL
         convertDebounceTimer = setTimeout(_doConvert, 150);
     }
 
-    function _doConvert() {
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = new Image();
-            img.onload = () => {
-                originalImage.src = img.src;
-                originalImageSrc.value = img.src;
-                // Scale image to cover the target canvas (preserve aspect ratio)
-                const targetW = (16 * 8) * useImageStore().width;
-                const targetH = (16 * 8) * useImageStore().height;
-                const imgAspect = img.naturalWidth / img.naturalHeight;
-                const canvasAspect = targetW / targetH;
-                if (imgAspect > canvasAspect) {
-                    // Image wider than target — fit height, let width overflow
-                    img.height = targetH;
-                    img.width  = targetH * imgAspect;
-                } else {
-                    // Image taller than target — fit width, let height overflow
-                    img.width  = targetW;
-                    img.height = targetW / imgAspect;
-                }
-                convertToLego(img, 8);
+    function loadImageFile(f) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = e.target.result;
             };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+            reader.onerror = reject;
+            reader.readAsDataURL(f);
+        });
+    }
+
+    // Scale image to cover the target canvas (preserve aspect ratio)
+    function coverScale(img) {
+        const targetW = (16 * 8) * useImageStore().width;
+        const targetH = (16 * 8) * useImageStore().height;
+        const imgAspect = img.naturalWidth / img.naturalHeight;
+        const canvasAspect = targetW / targetH;
+        if (imgAspect > canvasAspect) {
+            // Image wider than target — fit height, let width overflow
+            img.height = targetH;
+            img.width  = targetH * imgAspect;
+        } else {
+            // Image taller than target — fit width, let height overflow
+            img.width  = targetW;
+            img.height = targetW / imgAspect;
+        }
+    }
+
+    async function _doConvert() {
+        if (!file) return;
+        try {
+            const img = await loadImageFile(file);
+            originalImage.src = img.src;
+            originalImageSrc.value = img.src;
+            coverScale(img);
+            let imgB = null;
+            if (useImageStore().dualImage && fileB) {
+                imgB = await loadImageFile(fileB);
+                coverScale(imgB);
+            }
+            convertToLego(img, 8, imgB);
+        } catch (err) {
+            console.error('Loading image failed:', err);
+        }
     }
 
     function changeContrast(contrast) {
@@ -1556,7 +1960,16 @@ const baseURL = useRuntimeConfig().app.baseURL
     }
 
 
-    function convertToLego(image, studSize) {
+    // Draw an image onto the offscreen canvas with offset + brightness/contrast/grayscale applied
+    function drawAdjustedImage(image) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, useImageStore().x, useImageStore().y, image.width, image.height);
+        changeBrightness(useImageStore().brightness);
+        changeContrast(useImageStore().contrast);
+        if (useImageStore().grayscale) applyGrayscaleFilter(ctx);
+    }
+
+    function convertToLego(image, studSize, imageB = null) {
         // Always size the canvas to exactly the configured baseplate dimensions
         let numStudsX = 16 * useImageStore().width;
         let numStudsY = 16 * useImageStore().height;
@@ -1570,14 +1983,14 @@ const baseURL = useRuntimeConfig().app.baseURL
         overlayImgCanvasH.value = image.height
 
         // Draw the image at its cover-scaled size (aspect ratio preserved, canvas clips the overflow)
-        ctx.drawImage(image, useImageStore().x, useImageStore().y, image.width, image.height);
-
-        //image adjustment
-        changeBrightness(useImageStore().brightness);
-        changeContrast(useImageStore().contrast);
-        if (useImageStore().grayscale) {
-            applyGrayscaleFilter(ctx);
+        // In dual mode, image B is processed first so the canvas ends up holding image A
+        // (used by the non-mosaic preview).
+        let imageDataB = null;
+        if (imageB) {
+            drawAdjustedImage(imageB);
+            imageDataB = ctx.getImageData(0, 0, canvas.width, canvas.height);
         }
+        drawAdjustedImage(image);
 
         useImageStore().allColorOptions.forEach((item,i) => {
             useImageStore().allColorOptions[i].count = 0
@@ -1596,27 +2009,30 @@ const baseURL = useRuntimeConfig().app.baseURL
             // Single getImageData call — avoids per-stud GPU readbacks
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
+            const transfer = [imageData.data.buffer];
+            if (imageDataB) transfer.push(imageDataB.data.buffer);
             mosaicWorker.postMessage({
                 buffer: imageData.data.buffer,
+                bufferB: imageDataB ? imageDataB.data.buffer : null,
                 canvasWidth: canvas.width,
                 canvasHeight: canvas.height,
                 studSize,
                 colorOptions: useImageStore().allColorOptions.map(o => ({ color: Array.from(o.color), checked: !!o.checked, name: o.colorName })),
                 generation: processingGeneration,
                 enabledBrickIds: enabledBrickIds.value,
-            }, [imageData.data.buffer]);
+                dither: { enabled: !!useImageStore().dither, strength: Number(useImageStore().ditherStrength) / 100 },
+                height: {
+                    enabled: !!useImageStore().heightMap && !imageDataB,
+                    max: Number(useImageStore().heightMax),
+                    mode: useImageStore().heightMode,
+                    invert: !!useImageStore().heightInvert,
+                },
+            }, transfer);
         } else {
             legoCtx.drawImage(canvas, 0, 0);
+            flatImageUrl.value = canvas.toDataURL('image/png');
         }
 
-        preview_image = document.getElementById('preview-image')
-        image_container = document.getElementById('image-container')
-
-        if (useImageStore().previewArtOnWall && preview_image) {
-            let scale = preview_image.offsetWidth/300
-            image_container.style.width = ((0.80*16)*useImageStore().width).toFixed(1) * scale + "px"
-            image_container.style.height = ((0.80*16)*useImageStore().height).toFixed(1) * scale + "px"
-        }
     }
 
     function getAverageColor(ctx, x, y, width, height) {
@@ -1889,6 +2305,11 @@ const baseURL = useRuntimeConfig().app.baseURL
         const baseplateCount = useImageStore().width * useImageStore().height
         if (baseplateCount > 0) {
             addItem('65803', 0, baseplateCount, '16x16 Baseplate (any color)')
+        }
+
+        // Height map support pieces (all Black, BL color 11)
+        for (const item of [...supportPieces.value.bricks, ...supportPieces.value.plates]) {
+            addItem(item.blId, 11, item.count, `${escapeXML(item.label)} (Height support)`)
         }
 
         // Border frame pieces (all Black, BL color 11)

@@ -160,4 +160,9 @@ const COLOR_FILTER = {
     // ── 1×1 Plate (BL part 3024) ─────────────────────────────────────
     // Universal fallback — available in all LEGO colors.
     '1x1': null,
+
+    // ── 1×1 Cheese Slope 30° (BL part 54200) — dual-image mode ───────
+    // NOT VERIFIED against BrickLink yet: all palette colors are allowed.
+    // Replace with a Set of available CSV color names once checked.
+    '1x1S': null,
 };
